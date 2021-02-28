@@ -45,6 +45,7 @@ DMA_HandleTypeDef hdma_usart3_rx;
 DMA_HandleTypeDef hdma_usart3_tx;
 
 /* USER CODE BEGIN PV */
+uint8_t UART3_rxBuffer[12] = {0};
 
 /* USER CODE END PV */
 
@@ -75,7 +76,8 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+
+	HAL_Init();
 
   /* USER CODE BEGIN Init */
 
@@ -93,7 +95,7 @@ int main(void)
   MX_DMA_Init();
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
-
+  HAL_UART_Receive_DMA(&huart3, UART3_rxBuffer, 12);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -101,7 +103,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+	  //HAL_UART_Transmit(&huart3, UART3_rxBuffer, sizeof(UART3_rxBuffer), 100);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -161,7 +163,7 @@ static void MX_USART3_UART_Init(void)
 
   /* USER CODE END USART3_Init 1 */
   huart3.Instance = USART3;
-  huart3.Init.BaudRate = 115200;
+  huart3.Init.BaudRate = 9600;
   huart3.Init.WordLength = UART_WORDLENGTH_8B;
   huart3.Init.StopBits = UART_STOPBITS_1;
   huart3.Init.Parity = UART_PARITY_NONE;
@@ -224,6 +226,12 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+	HAL_UART_Receive_DMA(&huart3, UART3_rxBuffer, 12);
+	HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+	HAL_UART_Transmit(&huart3, UART3_rxBuffer, 12, 100);
+}
 
 /* USER CODE END 4 */
 
