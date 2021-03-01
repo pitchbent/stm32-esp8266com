@@ -23,6 +23,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include <stdbool.h> //There is no real true or false anymore
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,7 +47,7 @@ DMA_HandleTypeDef hdma_usart3_rx;
 DMA_HandleTypeDef hdma_usart3_tx;
 
 /* USER CODE BEGIN PV */
-uint8_t UART3_rxBuffer[12] = {0};
+uint8_t UART3_rxBuffer[5] = {0};
 
 /* USER CODE END PV */
 
@@ -60,7 +62,9 @@ static void MX_USART3_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+//Prototypes for Callbacks
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart);
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart);
 /* USER CODE END 0 */
 
 /**
@@ -76,8 +80,7 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-
-	HAL_Init();
+  HAL_Init();
 
   /* USER CODE BEGIN Init */
 
@@ -95,7 +98,7 @@ int main(void)
   MX_DMA_Init();
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
-  HAL_UART_Receive_DMA(&huart3, UART3_rxBuffer, 12);
+  HAL_UART_Receive_DMA(&huart3, UART3_rxBuffer, 5);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -103,7 +106,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	  //HAL_UART_Transmit(&huart3, UART3_rxBuffer, sizeof(UART3_rxBuffer), 100);
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -226,12 +229,27 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+/*Callback for a full receive buffer*/
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-	HAL_UART_Receive_DMA(&huart3, UART3_rxBuffer, 12);
-	HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-	HAL_UART_Transmit(&huart3, UART3_rxBuffer, 12, 100);
+	HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);             //Toggle the LED as indicator
+	HAL_UART_Receive_DMA(&huart3, UART3_rxBuffer, 5);
+	HAL_UART_Transmit_DMA(&huart3, UART3_rxBuffer, 5);
+
+
 }
+//Callback when Transmission was 1/2 completed
+void HAL_UART_TxHalfCpltCallback(UART_HandleTypeDef *huar)
+{
+
+}
+/*Callback when transmission was completed*/
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+
+}
+
+
 
 /* USER CODE END 4 */
 
