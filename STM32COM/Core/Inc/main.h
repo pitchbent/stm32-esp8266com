@@ -42,7 +42,8 @@ extern "C" {
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
-
+#define DMA_TIMEOUT_MS 10
+#define DMA_BUF_SIZE 5
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/
@@ -61,7 +62,12 @@ void Error_Handler(void);
 #define LED_Pin GPIO_PIN_1
 #define LED_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
-
+typedef struct
+{
+    volatile uint8_t  flag;     /* Timeout event flag */
+    uint16_t timer;             /* Timeout duration in msec */
+    uint16_t prevCOUNT;         /* Holds previous value of DMA_COUNT */
+} DMA_STRUCT;
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

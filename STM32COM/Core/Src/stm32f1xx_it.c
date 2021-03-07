@@ -42,7 +42,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-
+extern DMA_STRUCT dma_info;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -190,7 +190,17 @@ void SysTick_Handler(void)
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
+  //HAL_SYSTICK_IRQHandler();
+  /* DMA timer */
 
+  if(dma_info.timer == 1)
+  {
+      /* DMA Timeout event, call Callback*/
+      dma_info.flag = 1;
+      HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+      HAL_UART_RxCpltCallback(&huart3);
+  }
+  if(dma_info.timer) { --dma_info.timer; } //Decrease timer
   /* USER CODE END SysTick_IRQn 1 */
 }
 
@@ -240,6 +250,11 @@ void USART3_IRQHandler(void)
   HAL_UART_IRQHandler(&huart3);
   /* USER CODE BEGIN USART3_IRQn 1 */
 
+  if(__HAL_UART_GET_FLAG(&huart3,UART_FLAG_IDLE))
+  {
+	  __HAL_UART_CLEAR_IDLEFLAG(&huart3);  //Detect the idle line and load the timer
+	  dma_info.timer = DMA_TIMEOUT_MS;
+  }
   /* USER CODE END USART3_IRQn 1 */
 }
 

@@ -24,6 +24,8 @@
 /* USER CODE BEGIN Includes */
 
 #include <stdbool.h> //There is no real true or false anymore
+#include <stdio.h>	 //sprintf
+#include <string.h>
 
 /* USER CODE END Includes */
 
@@ -34,6 +36,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -47,7 +50,14 @@ DMA_HandleTypeDef hdma_usart3_rx;
 DMA_HandleTypeDef hdma_usart3_tx;
 
 /* USER CODE BEGIN PV */
-uint8_t UART3_rxBuffer[5] = {0};
+
+
+
+DMA_STRUCT dma_info = {DMA_TIMEOUT_MS,0,DMA_BUF_SIZE};
+
+uint8_t dma_rx_buf[DMA_BUF_SIZE];       /* Circular buffer for DMA */
+uint8_t data[DMA_BUF_SIZE] = {'\0'};    /* Data buffer that contains newly received data */
+char TxBuffer[DMA_BUF_SIZE];				//Sending buffer
 
 /* USER CODE END PV */
 
@@ -65,6 +75,7 @@ static void MX_USART3_UART_Init(void);
 //Prototypes for Callbacks
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart);
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart);
+
 /* USER CODE END 0 */
 
 /**
@@ -98,7 +109,11 @@ int main(void)
   MX_DMA_Init();
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
-  HAL_UART_Receive_DMA(&huart3, UART3_rxBuffer, 5);
+
+  if(HAL_UART_Receive_DMA(&huart3, dma_rx_buf, DMA_BUF_SIZE)==HAL_ERROR)			//Catch possible fault
+  {
+	  Error_Handler();
+  }
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -232,13 +247,59 @@ static void MX_GPIO_Init(void)
 /*Callback for a full receive buffer*/
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-	HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);             //Toggle the LED as indicator
-	HAL_UART_Receive_DMA(&huart3, UART3_rxBuffer, 5);
-	HAL_UART_Transmit_DMA(&huart3, UART3_rxBuffer, 5);
+    uint16_t  pos, start, length;
+    uint16_t currCOUNT = __HAL_DMA_GET_COUNTER(huart->hdmarx);
+
+    /* Ignore timeout flag if the buffer is perfectly filled but there was no new data until timeout*/
+    if(dma_info.flag && currCOUNT == DMA_BUF_SIZE)
+    {
+        dma_info.flag = 0;
+        return;
+    }
+
+    /* Calc the start value based on the length of the previous data */
+    if(dma_info.prevCOUNT<DMA_BUF_SIZE)
+    {
+    	start = (DMA_BUF_SIZE-dma_info.prevCOUNT);
+    }
+    else
+    {
+    	start = 0;
+    }
 
 
+    if(dma_info.flag)    /* Timeout event */
+    {
+        /* Calc the length data */
+
+    	if(dma_info.prevCOUNT < DMA_BUF_SIZE)
+    	{
+    		length = dma_info.prevCOUNT - currCOUNT; //There is old data to be ignored
+    	}
+    		else
+    		{
+    			length = DMA_BUF_SIZE - currCOUNT;  //Everything is new until the current position
+    		}
+		dma_info.prevCOUNT = currCOUNT;				//pass current position
+        dma_info.flag = 0;
+    }
+    	else                /* DMA Rx Complete event -> the entire buffer is full */
+    	{
+    		length = DMA_BUF_SIZE - start;
+    		dma_info.prevCOUNT = DMA_BUF_SIZE;
+    	}
+
+    /* Copy and Process new data */
+    for(uint16_t i=0,pos=start; i<length; ++i,++pos)
+    {
+        data[i] = dma_rx_buf[pos];
+    }
+    /*Bounce data back*/
+    HAL_UART_Transmit_DMA(&huart3, data, sizeof(data));
 }
-//Callback when Transmission was 1/2 completed
+
+
+/*Callback when Transmission was 1/2 completed*/
 void HAL_UART_TxHalfCpltCallback(UART_HandleTypeDef *huar)
 {
 
