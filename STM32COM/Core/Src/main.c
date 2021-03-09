@@ -53,11 +53,13 @@ DMA_HandleTypeDef hdma_usart3_tx;
 
 
 
-DMA_STRUCT dma_info = {DMA_TIMEOUT_MS,0,DMA_BUF_SIZE};
+DMA_STRUCT dma_info = {0,0,DMA_TIMEOUT_MS,DMA_BUF_SIZE};
 
 uint8_t dma_rx_buf[DMA_BUF_SIZE];       /* Circular buffer for DMA */
 uint8_t data[DMA_BUF_SIZE] = {'\0'};    /* Data buffer that contains newly received data */
+
 char TxBuffer[DMA_BUF_SIZE];				//Sending buffer
+
 
 /* USER CODE END PV */
 
@@ -109,6 +111,7 @@ int main(void)
   MX_DMA_Init();
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
+  __HAL_UART_ENABLE_IT(&huart3,UART_IT_IDLE);
 
   if(HAL_UART_Receive_DMA(&huart3, dma_rx_buf, DMA_BUF_SIZE)==HAL_ERROR)			//Catch possible fault
   {
@@ -250,12 +253,16 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     uint16_t  pos, start, length;
     uint16_t currCOUNT = __HAL_DMA_GET_COUNTER(huart->hdmarx);
 
+
+
+
     /* Ignore timeout flag if the buffer is perfectly filled but there was no new data until timeout*/
-    if(dma_info.flag && currCOUNT == DMA_BUF_SIZE)
+    if(dma_info.t_flag && currCOUNT == DMA_BUF_SIZE)
     {
-        dma_info.flag = 0;
+        dma_info.t_flag = 0;
         return;
     }
+
 
     /* Calc the start value based on the length of the previous data */
     if(dma_info.prevCOUNT<DMA_BUF_SIZE)
@@ -268,7 +275,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     }
 
 
-    if(dma_info.flag)    /* Timeout event */
+    if(dma_info.t_flag)    /* Timeout event */
     {
         /* Calc the length data */
 
@@ -281,7 +288,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     			length = DMA_BUF_SIZE - currCOUNT;  //Everything is new until the current position
     		}
 		dma_info.prevCOUNT = currCOUNT;				//pass current position
-        dma_info.flag = 0;
+        dma_info.t_flag = 0;
     }
     	else                /* DMA Rx Complete event -> the entire buffer is full */
     	{
@@ -294,8 +301,15 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     {
         data[i] = dma_rx_buf[pos];
     }
-    /*Bounce data back*/
-    HAL_UART_Transmit_DMA(&huart3, data, sizeof(data));
+    /*Bounce data back if the previous msg was sent out*/
+    if(dma_info.tx_flag == 0)
+    {
+    	HAL_UART_Transmit_DMA(&huart3, data, length);
+    	dma_info.tx_flag = 1;
+    }
+
+
+
 }
 
 
@@ -307,7 +321,7 @@ void HAL_UART_TxHalfCpltCallback(UART_HandleTypeDef *huar)
 /*Callback when transmission was completed*/
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 {
-
+	dma_info.tx_flag = 0;
 }
 
 

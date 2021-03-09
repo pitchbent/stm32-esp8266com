@@ -43,7 +43,7 @@ extern "C" {
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
 #define DMA_TIMEOUT_MS 10
-#define DMA_BUF_SIZE 5
+#define DMA_BUF_SIZE 4
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/
@@ -64,7 +64,8 @@ void Error_Handler(void);
 /* USER CODE BEGIN Private defines */
 typedef struct
 {
-    volatile uint8_t  flag;     /* Timeout event flag */
+    volatile uint8_t  t_flag;     /* Timeout event flag -> volatile because it's changed during ISR and read in main*/
+    uint8_t tx_flag;			/* Flag for Transmission Cplt*/
     uint16_t timer;             /* Timeout duration in msec */
     uint16_t prevCOUNT;         /* Holds previous value of DMA_COUNT */
 } DMA_STRUCT;
