@@ -61,6 +61,13 @@ uint8_t data[DMA_BUF_SIZE] = {'\0'};    /* Data buffer that contains newly recei
 char TxBuffer[DMA_BUF_SIZE];				//Sending buffer
 
 
+/*Variables for XTEA*/
+uint32_t xt_data[2] = {0x266e817d,0xbacd5035}; //2*32Bit Data
+uint32_t xt_key[4] = {KEY1,KEY2,KEY3,KEY4};	  //128Bit Key
+
+
+
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -117,6 +124,12 @@ int main(void)
   {
 	  Error_Handler();
   }
+
+  Encrypt_XTEA(xt_data, xt_key);
+  HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+  Decrypt_XTEA(xt_data, xt_key);
+  HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
