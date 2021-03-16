@@ -197,7 +197,7 @@ void SysTick_Handler(void)
   {
       /* DMA Timeout event, call Callback*/
       dma_info.t_flag = 1;
-      HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+      //HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
       HAL_UART_RxCpltCallback(&huart3);
   }
   if(dma_info.timer) { --dma_info.timer; } //Decrease timer

@@ -1,3 +1,7 @@
+#ifndef __XTEA_H
+#define __XTEA_H
+
+
 #include <Arduino.h>
 
 /*Number of times the algorithm is computed*/
@@ -13,3 +17,6 @@
 /*XTEA functions*/
 void Encrypt_XTEA(uint32_t data[2], uint32_t key[4]);
 void Decrypt_XTEA(uint32_t data[2], uint32_t key[4]);
+
+
+#endif 

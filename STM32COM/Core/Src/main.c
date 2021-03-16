@@ -57,7 +57,9 @@ DMA_STRUCT dma_info = {0,0,DMA_TIMEOUT_MS,DMA_BUF_SIZE};
 
 uint8_t dma_rx_buf[DMA_BUF_SIZE];       /* Circular buffer for DMA */
 uint8_t data[DMA_BUF_SIZE] = {'\0'};    /* Data buffer that contains newly received data */
+uint8_t data_avaiable = 0;
 
+uint8_t err_msg[4] = {'e','r','r','\n'};
 char TxBuffer[DMA_BUF_SIZE];				//Sending buffer
 
 
@@ -139,6 +141,29 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  if(data_avaiable == 1)
+	  {
+		  data_avaiable = 0;
+		  if (data[0]==0x3c && data[9]==0x0a)
+		  {
+			  HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+
+			  xt_data[0] = (data[1]<<24 | data[2]<<16 | data[3]<<8 | data[4]);  //Concatenate Hex input to one uint32t
+			  xt_data[1] = (data[5]<<24 | data[6]<<16 | data[7]<<8 | data[8]);
+
+			  Decrypt_XTEA(xt_data, xt_key);
+
+			  for (int i = 0; i < sizeof(data); ++i) {
+				data[i] = 0;
+			}
+		  }
+		  else
+		  {
+			  HAL_UART_Transmit_DMA(&huart3, err_msg, 4);
+		  }
+	  }
+
+
   }
   /* USER CODE END 3 */
 }
@@ -314,12 +339,14 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     {
         data[i] = dma_rx_buf[pos];
     }
+    data_avaiable = 1;
+
     /*Bounce data back if the previous msg was sent out*/
-    if(dma_info.tx_flag == 0)
-    {
-    	HAL_UART_Transmit_DMA(&huart3, data, length);
-    	dma_info.tx_flag = 1;
-    }
+//    if(dma_info.tx_flag == 0)
+//    {
+//    	HAL_UART_Transmit_DMA(&huart3, data, length);
+//    	dma_info.tx_flag = 1;
+//    }
 
 
 
