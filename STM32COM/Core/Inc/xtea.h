@@ -30,4 +30,4 @@ void Decrypt_XTEA(uint32_t data[2], uint32_t key[4]);
 }
 #endif
 
-#endif /* __MAIN_H */
+#endif

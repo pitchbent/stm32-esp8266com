@@ -27,6 +27,7 @@
 #include <stdio.h>	 //sprintf
 #include <string.h>
 #include "xtea.h"
+#include "crc16ccitt.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,6 +46,11 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+ADC_HandleTypeDef hadc1;
+
+TIM_HandleTypeDef htim1;
+TIM_HandleTypeDef htim2;
+
 UART_HandleTypeDef huart3;
 DMA_HandleTypeDef hdma_usart3_rx;
 DMA_HandleTypeDef hdma_usart3_tx;
@@ -55,12 +61,26 @@ DMA_HandleTypeDef hdma_usart3_tx;
 
 DMA_STRUCT dma_info = {0,0,DMA_TIMEOUT_MS,DMA_BUF_SIZE};
 
+
+/*Variables UART*/
 uint8_t dma_rx_buf[DMA_BUF_SIZE];       /* Circular buffer for DMA */
-uint8_t data[DMA_BUF_SIZE] = {'\0'};    /* Data buffer that contains newly received data */
+uint8_t data[DMA_BUF_SIZE] = {'\0'};    /* Data buffer that contains newly received data -*/
 uint8_t data_avaiable = 0;
 
 uint8_t err_msg[4] = {'e','r','r','\n'};
-char TxBuffer[DMA_BUF_SIZE];				//Sending buffer
+uint8_t TxBuffer[10];				//Sending buffer
+uint8_t SensorValue = 's';
+char Filler = 'x';
+char startMaker = '<';
+uint8_t length, length1;
+uint16_t crc16;
+uint16_t crc16_calc;
+uint16_t test_array[DMA_BUF_SIZE];
+
+/*Variables ADC*/
+uint16_t adc_value;
+uint8_t adc_complete_flag;
+uint8_t adc_send_buffer[5];
 
 
 /*Variables for XTEA*/
@@ -68,7 +88,7 @@ uint32_t xt_data[2] = {0x266e817d,0xbacd5035}; //2*32Bit Data
 uint32_t xt_key[4] = {KEY1,KEY2,KEY3,KEY4};	  //128Bit Key
 
 
-
+uint8_t Test;
 
 /* USER CODE END PV */
 
@@ -77,6 +97,9 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_DMA_Init(void);
 static void MX_USART3_UART_Init(void);
+static void MX_ADC1_Init(void);
+static void MX_TIM2_Init(void);
+static void MX_TIM1_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -86,7 +109,8 @@ static void MX_USART3_UART_Init(void);
 //Prototypes for Callbacks
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart);
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart);
-
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc);
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
 /* USER CODE END 0 */
 
 /**
@@ -119,7 +143,18 @@ int main(void)
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_USART3_UART_Init();
+  MX_ADC1_Init();
+  MX_TIM2_Init();
+  MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
+  HAL_ADCEx_Calibration_Start(&hadc1);
+  HAL_ADC_Start_IT(&hadc1);
+
+  //HAL_TIM_Base_Start_IT(&htim2);
+  //HAL_TIM_Base_Start_IT(&htim1);
+
+
+
   __HAL_UART_ENABLE_IT(&huart3,UART_IT_IDLE);
 
   if(HAL_UART_Receive_DMA(&huart3, dma_rx_buf, DMA_BUF_SIZE)==HAL_ERROR)			//Catch possible fault
@@ -127,10 +162,8 @@ int main(void)
 	  Error_Handler();
   }
 
-  Encrypt_XTEA(xt_data, xt_key);
-  HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-  Decrypt_XTEA(xt_data, xt_key);
-  HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+
+
 
   /* USER CODE END 2 */
 
@@ -141,27 +174,77 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  if(adc_complete_flag == 1)
+	  {
+
+		  adc_send_buffer[0] = adc_value & 0xFF;
+		  adc_send_buffer[1] = (adc_value >> 8) & 0xFF;
+
+
+		  xt_data[0] = (SensorValue<<24 | adc_send_buffer[1]<<16 | adc_send_buffer[0]<<8 | Filler);  //Concatenate Hex input to one uint32t
+		  xt_data[1] = (Filler<<24 | Filler<<16 | Filler<<8 | Filler);
+
+		  //Encrypt_XTEA(xt_data, xt_key);
+
+
+		  TxBuffer[0] = '<';
+		  TxBuffer[1] = (xt_data[0]>>24) & 0xFF;
+		  TxBuffer[2] = (xt_data[0]>>16) & 0xFF;
+		  TxBuffer[3] = (xt_data[0]>>8) & 0xFF;
+		  TxBuffer[4] = xt_data[0] & 0xFF;
+		  TxBuffer[5] = (xt_data[1]>>24)& 0xFF;
+		  TxBuffer[6] = (xt_data[1]>>16) & 0xFF;
+		  TxBuffer[7] = (xt_data[1]>>8) & 0xFF;
+		  TxBuffer[8] = xt_data[1] & 0xFF;
+		  TxBuffer[9] = '\n';
+
+
+		  HAL_UART_Transmit_DMA(&huart3, TxBuffer, sizeof(TxBuffer));
+
+
+
+		  adc_complete_flag = 0;
+	  }
+
+
+
 	  if(data_avaiable == 1)
 	  {
 		  data_avaiable = 0;
-		  if (data[0]==0x3c && data[9]==0x0a)
+		  HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+		  //HAL_ADC_Start_IT(&hadc1);
+		  if (data[0]=='<')
 		  {
+
+			  HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+			  length = (data[1]-48)*10 + (data[2]-48);			//ASCII to int
+			  crc16 = (data[length+3]<<8 | data[length+4]);		//CRC values are the values after the message AND the first three bytes
+
+			  crc16_calc = CRC16_buf(data+3, length);
+
 			  HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
 
-			  xt_data[0] = (data[1]<<24 | data[2]<<16 | data[3]<<8 | data[4]);  //Concatenate Hex input to one uint32t
-			  xt_data[1] = (data[5]<<24 | data[6]<<16 | data[7]<<8 | data[8]);
 
-			  Decrypt_XTEA(xt_data, xt_key);
 
-			  for (int i = 0; i < sizeof(data); ++i) {
-				data[i] = 0;
 			}
-		  }
-		  else
-		  {
-			  HAL_UART_Transmit_DMA(&huart3, err_msg, 4);
-		  }
-	  }
+			  //snprintf(TxBuffer, sizeof(TxBuffer),"%d", adc_value);
+
+			  //HAL_UART_Transmit_DMA(&huart3, TxBuffer, sizeof(TxBuffer));
+
+			  //xt_data[0] = (data[1]<<24 | data[2]<<16 | data[3]<<8 | data[4]);  //Concatenate Hex input to one uint32t
+			  //xt_data[1] = (data[5]<<24 | data[6]<<16 | data[7]<<8 | data[8]);
+			  //Decrypt_XTEA(xt_data, xt_key);
+
+//			  for (int i = 0; i < sizeof(data); ++i) {
+//				data[i] = 0;
+			}
+
+//		  else
+//		  {
+//			  HAL_UART_Transmit_DMA(&huart3, err_msg, 4);
+//		  }
+//	  }
+
 
 
   }
@@ -176,6 +259,7 @@ void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+  RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
 
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
@@ -204,6 +288,148 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC;
+  PeriphClkInit.AdcClockSelection = RCC_ADCPCLK2_DIV6;
+  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+  {
+    Error_Handler();
+  }
+}
+
+/**
+  * @brief ADC1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_ADC1_Init(void)
+{
+
+  /* USER CODE BEGIN ADC1_Init 0 */
+
+  /* USER CODE END ADC1_Init 0 */
+
+  ADC_ChannelConfTypeDef sConfig = {0};
+
+  /* USER CODE BEGIN ADC1_Init 1 */
+
+  /* USER CODE END ADC1_Init 1 */
+  /** Common config
+  */
+  hadc1.Instance = ADC1;
+  hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
+  hadc1.Init.ContinuousConvMode = ENABLE;
+  hadc1.Init.DiscontinuousConvMode = DISABLE;
+  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  hadc1.Init.NbrOfConversion = 1;
+  if (HAL_ADC_Init(&hadc1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure Regular Channel
+  */
+  sConfig.Channel = ADC_CHANNEL_0;
+  sConfig.Rank = ADC_REGULAR_RANK_1;
+  sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN ADC1_Init 2 */
+
+  /* USER CODE END ADC1_Init 2 */
+
+}
+
+/**
+  * @brief TIM1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM1_Init(void)
+{
+
+  /* USER CODE BEGIN TIM1_Init 0 */
+
+  /* USER CODE END TIM1_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM1_Init 1 */
+
+  /* USER CODE END TIM1_Init 1 */
+  htim1.Instance = TIM1;
+  htim1.Init.Prescaler = 7200-1;
+  htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim1.Init.Period = 5000-1;
+  htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim1.Init.RepetitionCounter = 0;
+  htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim1, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM1_Init 2 */
+
+  /* USER CODE END TIM1_Init 2 */
+
+}
+
+/**
+  * @brief TIM2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM2_Init(void)
+{
+
+  /* USER CODE BEGIN TIM2_Init 0 */
+
+  /* USER CODE END TIM2_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM2_Init 1 */
+
+  /* USER CODE END TIM2_Init 1 */
+  htim2.Instance = TIM2;
+  htim2.Init.Prescaler = 7200-1;
+  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim2.Init.Period = 5000;
+  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM2_Init 2 */
+
+  /* USER CODE END TIM2_Init 2 */
+
 }
 
 /**
@@ -285,6 +511,25 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+/*Timer Callback*/
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+	//HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+	HAL_ADC_Start_IT(&hadc1);
+
+}
+
+
+/*ADC Callback*/
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
+{
+	adc_value = HAL_ADC_GetValue(&hadc1);
+	//HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+	HAL_ADC_Stop_IT(&hadc1);
+	adc_complete_flag = 1;
+}
+
+
 /*Callback for a full receive buffer*/
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
