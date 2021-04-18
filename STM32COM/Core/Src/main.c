@@ -22,12 +22,16 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "xtea.h"
+#include "crc16ccitt.h"
+#include "uartcom.h"
+#include "sensor.h"
+
 
 #include <stdbool.h> //There is no real true or false anymore
 #include <stdio.h>	 //sprintf
 #include <string.h>
-#include "xtea.h"
-#include "crc16ccitt.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -60,27 +64,31 @@ DMA_HandleTypeDef hdma_usart3_tx;
 
 
 DMA_STRUCT dma_info = {0,0,DMA_TIMEOUT_MS,DMA_BUF_SIZE};
+SENS_STRUCT sensor = {0,0,0,0};
 
 
 /*Variables UART*/
 uint8_t dma_rx_buf[DMA_BUF_SIZE];       /* Circular buffer for DMA */
 uint8_t data[DMA_BUF_SIZE] = {'\0'};    /* Data buffer that contains newly received data -*/
-uint8_t data_avaiable = 0;
+volatile uint8_t data_avaiable = 0;
 
-uint8_t err_msg[4] = {'e','r','r','\n'};
+//uint8_t err_msg[4] = {'e','r','r','\n'};
 uint8_t TxBuffer[10];				//Sending buffer
-uint8_t SensorValue = 's';
-char Filler = 'x';
-char startMaker = '<';
-uint8_t length, length1;
-uint16_t crc16;
-uint16_t crc16_calc;
+uint8_t TxLen;						//Length of the data to be sent
+//uint8_t SensorValue = 's';
+//char Filler = 'x';
+//char startMaker = '<';
+uint8_t data_len;
 uint16_t test_array[DMA_BUF_SIZE];
 
 /*Variables ADC*/
 uint16_t adc_value;
 uint8_t adc_complete_flag;
-uint8_t adc_send_buffer[5];
+//uint8_t adc_send_buffer[5];
+
+/*Variables Timer*/
+volatile uint8_t timer1_f; //flags for timers
+volatile uint8_t timer2_f;
 
 
 /*Variables for XTEA*/
@@ -89,6 +97,7 @@ uint32_t xt_key[4] = {KEY1,KEY2,KEY3,KEY4};	  //128Bit Key
 
 
 uint8_t Test;
+double var,var1,var2 = 0.0;
 
 /* USER CODE END PV */
 
@@ -148,10 +157,11 @@ int main(void)
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
   HAL_ADCEx_Calibration_Start(&hadc1);
-  HAL_ADC_Start_IT(&hadc1);
+  //HAL_ADC_Start_IT(&hadc1);
 
   //HAL_TIM_Base_Start_IT(&htim2);
   //HAL_TIM_Base_Start_IT(&htim1);
+
 
 
 
@@ -163,6 +173,9 @@ int main(void)
   }
 
 
+  var = 100.0 / 1200.0;
+  var1 = 22.5*33.02;
+  var2 = var+var1;
 
 
   /* USER CODE END 2 */
@@ -176,30 +189,32 @@ int main(void)
     /* USER CODE BEGIN 3 */
 	  if(adc_complete_flag == 1)
 	  {
+		  if (sensor.calibrated == 1)
+		  {
+			  sensor.an_value = HAL_ADC_GetValue(&hadc1);
+			  if(sensor.an_value-sensor.wet_value > 0)										//check if the value is positive
+			  {
+				  sensor.percentage = 100-((sensor.wet_value-sensor.an_value)*100)/(sensor.wet_value-sensor.dry_value); // ((an_value-wet)*100) / (dry-wet)
+			  }
+			  else
+			  {
+				  sensor.percentage = 0;
+			  }
+			  TxLen = an_send(sensor.percentage, TxBuffer);
+			  HAL_UART_Transmit_DMA(&huart3, TxBuffer, TxLen);
+		  }
 
-		  adc_send_buffer[0] = adc_value & 0xFF;
-		  adc_send_buffer[1] = (adc_value >> 8) & 0xFF;
 
-
-		  xt_data[0] = (SensorValue<<24 | adc_send_buffer[1]<<16 | adc_send_buffer[0]<<8 | Filler);  //Concatenate Hex input to one uint32t
-		  xt_data[1] = (Filler<<24 | Filler<<16 | Filler<<8 | Filler);
+		  //xt_data[0] = (SensorValue<<24 | adc_send_buffer[1]<<16 | adc_send_buffer[0]<<8 | Filler);  //Concatenate Hex input to one uint32t
+		  //xt_data[1] = (Filler<<24 | Filler<<16 | Filler<<8 | Filler);
 
 		  //Encrypt_XTEA(xt_data, xt_key);
+//		  sprintf(adc_send_buffer,"%d",adc_value);
+//		  crc16_calc = CRC16_buf(adc_send_buffer, 5);
 
 
-		  TxBuffer[0] = '<';
-		  TxBuffer[1] = (xt_data[0]>>24) & 0xFF;
-		  TxBuffer[2] = (xt_data[0]>>16) & 0xFF;
-		  TxBuffer[3] = (xt_data[0]>>8) & 0xFF;
-		  TxBuffer[4] = xt_data[0] & 0xFF;
-		  TxBuffer[5] = (xt_data[1]>>24)& 0xFF;
-		  TxBuffer[6] = (xt_data[1]>>16) & 0xFF;
-		  TxBuffer[7] = (xt_data[1]>>8) & 0xFF;
-		  TxBuffer[8] = xt_data[1] & 0xFF;
-		  TxBuffer[9] = '\n';
 
 
-		  HAL_UART_Transmit_DMA(&huart3, TxBuffer, sizeof(TxBuffer));
 
 
 
@@ -210,23 +225,84 @@ int main(void)
 
 	  if(data_avaiable == 1)
 	  {
+		  //sensor.calibrated =1;
+		  //sensor.percentage=100;
 		  data_avaiable = 0;
-		  HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-		  //HAL_ADC_Start_IT(&hadc1);
-		  if (data[0]=='<')
-		  {
+		  //HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+		  data_len = data_check(data);
 
-			  HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-			  length = (data[1]-48)*10 + (data[2]-48);			//ASCII to int
-			  crc16 = (data[length+3]<<8 | data[length+4]);		//CRC values are the values after the message AND the first three bytes
-
-			  crc16_calc = CRC16_buf(data+3, length);
-
-			  HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+		  if (data_len != 0) {
+			  switch (data[3]) {
 
 
+				case STATUS:
+					TxLen = ack_send(STATUS, TxBuffer);
+					HAL_UART_Transmit_DMA(&huart3, TxBuffer, TxLen);
 
+					HAL_Delay(10);								//wait until we can transmit again
+
+					TxLen = stat_send(TxBuffer);
+					HAL_UART_Transmit_DMA(&huart3, TxBuffer, TxLen);
+					break;
+
+
+				case CALIBRATE:
+					TxLen = ack_send(CALIBRATE, TxBuffer);
+					HAL_UART_Transmit_DMA(&huart3, TxBuffer, TxLen);
+
+					HAL_Delay(10);
+
+					sensor.calibrated = cal_sens(hadc1,&sensor);
+					if (sensor.calibrated == 0)					//Sensor was not calibrated
+					{
+						TxLen = er_send(ER_CAL,TxBuffer);
+						HAL_UART_Transmit_DMA(&huart3, TxBuffer, TxLen);
+					}
+
+					break;
+
+
+				case SEND_VAL:
+					TxLen = ack_send(SEND_VAL, TxBuffer);
+					HAL_UART_Transmit_DMA(&huart3, TxBuffer, TxLen);
+
+					HAL_Delay(10);
+
+					if (data[4] == '1')
+					{
+						if(sensor.calibrated == 1)
+						{
+							//enable timer for adc
+							HAL_TIM_Base_Start_IT(&htim1);
+						}
+						else
+						{
+							TxLen = er_send(ER_NOT_CAL,TxBuffer);
+							HAL_UART_Transmit_DMA(&huart3, TxBuffer, TxLen);
+						}
+					}
+					else
+					{
+						//disable timer for adc
+						HAL_TIM_Base_Stop_IT(&htim1);
+					}
+					break;
+
+				default:
+					TxLen = er_send(ER_UN_MSG,TxBuffer);
+					HAL_UART_Transmit_DMA(&huart3, TxBuffer, TxLen);
+
+					HAL_Delay(10);
+
+					break;
 			}
+
+		}
+
+
+
+
+
 			  //snprintf(TxBuffer, sizeof(TxBuffer),"%d", adc_value);
 
 			  //HAL_UART_Transmit_DMA(&huart3, TxBuffer, sizeof(TxBuffer));
@@ -408,7 +484,7 @@ static void MX_TIM2_Init(void)
   htim2.Instance = TIM2;
   htim2.Init.Prescaler = 7200-1;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 5000;
+  htim2.Init.Period = 50000-1;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
@@ -448,7 +524,7 @@ static void MX_USART3_UART_Init(void)
 
   /* USER CODE END USART3_Init 1 */
   huart3.Instance = USART3;
-  huart3.Init.BaudRate = 9600;
+  huart3.Init.BaudRate = 115200;
   huart3.Init.WordLength = UART_WORDLENGTH_8B;
   huart3.Init.StopBits = UART_STOPBITS_1;
   huart3.Init.Parity = UART_PARITY_NONE;
@@ -515,15 +591,24 @@ static void MX_GPIO_Init(void)
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	//HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-	HAL_ADC_Start_IT(&hadc1);
 
+	/*Check which timer isr fired*/
+	if(htim->Instance == TIM1)
+	{
+		HAL_ADC_Start_IT(&hadc1);
+	}
+	if(htim->Instance == TIM2)
+	{
+		//HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+		HAL_TIM_Base_Stop_IT(&htim2);
+		timer2_f = 1;
+	}
 }
 
 
 /*ADC Callback*/
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 {
-	adc_value = HAL_ADC_GetValue(&hadc1);
 	//HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
 	HAL_ADC_Stop_IT(&hadc1);
 	adc_complete_flag = 1;

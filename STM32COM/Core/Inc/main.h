@@ -42,9 +42,30 @@ extern "C" {
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
+#define VERSION '1'
+#define SENSOR 'C' //used sensor
 
+
+/*Defines DMA */
 #define DMA_TIMEOUT_MS 10
 #define DMA_BUF_SIZE 128
+
+/*Defines protocol*/
+/*Receive Bytes*/
+#define STATUS '0'
+#define CALIBRATE '1'
+#define SEND_VAL '2'
+/*Transmit Bytes*/
+#define BOARD 'B'
+#define ANVALUE 'A'
+#define ERROR 'E'
+#define ACK 'K'
+/*Error Bytes*/
+#define ER_UNSPEC '0'	//unspecified error
+#define ER_CAL '1'		//calibration error
+#define ER_NOT_CAL '2'	//sensor not calibrated
+#define ER_UN_MSG '3'	//unknown control message
+
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/
@@ -65,11 +86,23 @@ void Error_Handler(void);
 /* USER CODE BEGIN Private defines */
 typedef struct
 {
-    volatile uint8_t  t_flag;     /* Timeout event flag -> volatile because it's changed during ISR and read in main*/
-    uint8_t tx_flag;			/* Flag for Transmission Cplt*/
-    uint16_t timer;             /* Timeout duration in msec */
-    uint16_t prevCOUNT;         /* Holds previous value of DMA_COUNT */
+    volatile uint8_t  t_flag;   // Timeout event flag -> volatile because it's changed during ISR and read in main
+    uint8_t tx_flag;			// Flag for Transmission Cplt
+    uint16_t timer;             // Timeout duration in msec
+    uint16_t prevCOUNT;         // Holds previous value of DMA_COUNT
 } DMA_STRUCT;
+
+typedef struct
+{
+	uint8_t calibrated;			// Flag if its calibrated
+	double coeff; 				// Coefficient which needs to be calculated for conversion value -> percentage
+	uint16_t dry_value;			// Value of the dry sensor, needed for calculation of the percentage
+	uint16_t wet_value;			// Value of the wet sensor, "
+	volatile uint8_t timer_f;	// Flag for measuring timer
+	uint16_t an_value;			// measured humidity
+	uint8_t percentage;			// humidity in percent
+
+} SENS_STRUCT;
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

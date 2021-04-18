@@ -9,7 +9,7 @@
 extern "C" {
 #endif
 
-
+#include <stdio.h>
 
 /*Number of times the algorithm is computed*/
 #define NUM_CYCLES 32

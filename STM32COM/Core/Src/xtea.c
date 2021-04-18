@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <xtea.h>
 
 void Encrypt_XTEA(uint32_t v[2],uint32_t k[4])
