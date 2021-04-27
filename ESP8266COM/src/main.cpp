@@ -16,26 +16,28 @@ const char* mqtt_server = "192.168.178.68";
 WiFiClient espClient;
 PubSubClient client(espClient);
 
-
 const uint16_t ledPin = 12;
 
-const uint8_t numChars = 60;
+const uint8_t numChars = 99;
 uint8_t receivedChars[numChars];   // an array to store the received Data
 bool newData = false;
 uint16_t timeout = 10000;
-static uint16_t length;
+uint16_t length_pub;
 
-
-uint32_t xt_data[2] = {0x266e817d,0xbacd5035}; //2*32Bit Data
-
-
+uint8_t mqtt_in_data[numChars];
 
 
 
 
-void receive2();
+//uint32_t xt_data[2] = {0x266e817d,0xbacd5035}; //2*32Bit Data
+
+
+
+
+
+
 void receive();
-void showNewData(); 
+
 
 void setup_wifi();
 void callback(String topic, byte* message, unsigned int length);
@@ -57,8 +59,7 @@ void setup() {
 
 void loop() {
 
-    receive2();
-    //showNewData();
+    receive();
     if (!client.connected()) {
     reconnect();
     }
@@ -67,22 +68,20 @@ void loop() {
     if (newData == true)
     {
     Serial.println("pub mq");
-    client.publish("testTopic",receivedChars+3,length);
-    client.publish("testTopic","arschi");
+    client.publish("testTopic",receivedChars+3,length_pub);
+    client.publish("testTopic","test");
+   
     newData = false;
     }
 }
 
 
-void receive2()
+void receive()
 {
   static uint16_t count = 0;
   static bool InProg = false;
   static uint8_t len= 0;
   uint16_t crc, crc_calc;
-  bool state = false;
-
-  
   static uint32_t tim;
   
   /*Check for timeout*/
@@ -94,8 +93,6 @@ void receive2()
 
   while (Serial.available() > 0 && newData == false)
   {
-      digitalWrite(ledPin, (state) ? HIGH : LOW);
-      state = !state;
       
       tim = millis(); //Update timer
       receivedChars[count] = Serial.read(); //Read serial
@@ -119,7 +116,7 @@ void receive2()
 
         if(crc == crc_calc)
         {
-          length = len; //pass the count
+          length_pub = len; //pass the count
           InProg = false; //reset
           newData = true; //New data is available
           len = 0;        //reset
@@ -150,163 +147,11 @@ void receive2()
 
 }
 
-
-
-// void receive()
-// {
-//   static boolean recvInProgress = false;
-//   static boolean beginRead = false;
-//   static boolean length_f, length_f1 = false;
-//   static byte ndx = 0;
-//   char startMarker = '<';
-//   char rc;
-//   static uint32_t timer;
-//   static uint16_t store[50];
-
-
-
-//   /*Check for timeout*/
-//   if (recvInProgress == true && (millis() - timer > timeout))
-//   {
-//     ndx = 0;
-//     recvInProgress = false;
-//     Serial.println("timeout");
-//   }
-
-//   /*Receive Data*/
-//   while (Serial.available() > 0 && newData == false)
-//   {
-
-//     timer = millis();   //store timer to detect time out
-//     rc = Serial.read();
-//     store[ndx] = rc;
-
-//     if (recvInProgress == true)
-//     {
-
-//       if (length_f == true && length_f1 == true) //The length bytes are stored - store incoming data
-//       {
-//         if (ndx < length1)
-//         {
-//           //Serial.print("ndx count: ");
-//           //Serial.println(ndx);
-//           receivedChars[ndx] = rc;
-//           //Serial.println(receivedChars[ndx]);
-//         }
-//         if (ndx == length1 + 1) //store crc byte 2
-//         {
-//           crc1 = rc;
-//           crc = ((crc0 << 8)| crc1); 
-
-
-//           Serial.print("rec chars: ");
-//           for (uint8_t i = 0; i < length1; i++)
-//           {
-//             Serial.print(receivedChars[i],HEX);
-//           }
-
-          
-//           Serial.println();
-//           Serial.print("crc0 value: ");
-//           Serial.println(crc0, HEX);
-//           Serial.println();
-//           Serial.print("crc1 value: ");
-//           Serial.println(crc1, HEX);
-//           Serial.println();
-//           Serial.print("crc value: ");
-//           Serial.println(crc, HEX);
-
-
-//           Serial.println();
-//           Serial.print("calc_crc value: ");
-//           calc_crc = CRC16_buf(receivedChars,length1+3);
-//           Serial.println(calc_crc, HEX);
-
-//           for (uint8_t i = 0; i < length1+3; i++)
-//           {
-//             Serial.println(receivedChars[i],HEX);
-//           }
-          
-
-//           recvInProgress = false;
-
-//           if (calc_crc == crc)
-//           {
-//             newData = true;
-//             Serial.println("CRC matches");
-//           }
-//           else
-//           {
-//             newData = false;
-//             Serial.println("CRC does not match");
-//           }
-          
-//           calc_crc = CRC16_buf(testArray,4);
-
-//           Serial.println("CRC calc test:");
-//           Serial.println(calc_crc,HEX);
-
-//           //Serial.println("crc1");
-//         }
-//         if (ndx == length1) //store crc byte 1
-//         {
-//           crc0 = rc;
-
-//           //Serial.println("crc");
-//         }
-
-//         ndx++; //increment array 
-//       }
-
-//       if (length_f == true && length_f1 == false) //Store length byte 2
-//       { 
-//         length1 = (rc - 48) + (length * 10); //calculate length
-//         length_f1 = true;
-//         Serial.println("length 1 is:");
-//         Serial.println(length1);
-//       }
-
-//       if (length_f == false && length_f1 == false) //Store length byte 1
-//       {
-//         length = rc - 48; //ASCII to int
-//         length_f = true;
-//         Serial.println("length  is:");
-//         Serial.println(length);
-//       }
-//     }
-
-//     else if (rc == startMarker)
-//     {
-//       recvInProgress = true;        
-//       length_f = false;             //Reset all the flags & counters
-//       length_f1 = false;
-//       ndx = 0;
-//       Serial.println("inprogress");
-//     }
-//   }
-// }
-
-void showNewData() {
-    if (newData == true) {
-        digitalWrite(ledPin,HIGH);
-        //Serial.print("<12345678");
-        //Serial.println(receivedChars);
-        newData = false;
-        for (uint8_t i = 0; i < numChars; i++)
-        {
-            receivedChars[i] = 0;
-        }
-        
-    }
-}
-    
-
   
 // Don't change the function below. This functions connects your ESP8266 to your router
 void setup_wifi() {
 
   delay(10);
-  // We start by connecting to a WiFi network
   Serial.println();
   Serial.print("Connecting to ");
   Serial.println(ssid);
@@ -319,15 +164,64 @@ void setup_wifi() {
   Serial.print("WiFi connected - ESP IP address: ");
   Serial.println(WiFi.localIP());
 }
-
-// This functions is executed when some device publishes a message to a topic that your ESP8266 is subscribed to
-// Change the function below to add logic to your program, so when a device publishes a message to a topic that 
-// your ESP8266 is subscribed you can actually do something
+//Callback if a message is published on the subscribed topic
+//Converts the received message into a message which is understood by STM and forwards it
 void callback(String topic, byte* message, unsigned int length) {
+  char len_buf[2];
+  uint16_t crc16;
+ 
   Serial.print("Message arrived on topic: ");
   Serial.print(topic);
   Serial.print(". Message: ");
-  String messageTemp;
+  
+  sprintf(len_buf,"%d",length); //turn int to char array
+
+  Serial.println("len_buf items:");
+  Serial.println(len_buf[0]);
+  Serial.println(len_buf[1]);
+
+
+  mqtt_in_data[0]=START_MARKER; 
+
+  if (length <10)
+  {
+    Serial.println("length under 10");
+    mqtt_in_data[1] = '0';
+    mqtt_in_data[2] = len_buf[0];
+  }
+  else
+  {
+    Serial.println("length over 10");
+    mqtt_in_data[1] = len_buf[0];
+    mqtt_in_data[2] = len_buf[1];
+  }
+  
+  
+  //mqtt_in_data[1]=len_buf[0];   //append the length bytes
+  //mqtt_in_data[2]=len_buf[1];
+
+  for (uint8_t i = 0; i < length; i++)    //append the msg
+  {
+    mqtt_in_data[i+3] = message[i];
+  }
+
+  crc16 = CRC16_buf(mqtt_in_data,length+3); //calc the crc16
+
+  mqtt_in_data[length+3] = (crc16 >> 8) & 0xFF; //append crc16 split into two bytes
+  mqtt_in_data[length+4] = (crc16 >> 0) & 0xFF;
+
+  Serial.println("Message to send:");
+
+  for (uint8_t c = 0; c <= (length+4); c++)
+  {
+    Serial.print(mqtt_in_data[c],HEX);
+  }
+  
+  
+  
+
+
+  
   
 }
 
@@ -346,7 +240,7 @@ void reconnect() {
       // Once connected, publish an announcement...
       client.publish("outTopic", "hello world");
       // ... and resubscribe
-      client.subscribe("inTopic");
+      client.subscribe("testTopic");
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
