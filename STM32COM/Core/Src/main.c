@@ -96,7 +96,8 @@ uint32_t xt_data[2] = {0x266e817d,0xbacd5035}; //2*32Bit Data
 uint32_t xt_key[4] = {KEY1,KEY2,KEY3,KEY4};	  //128Bit Key
 
 
-uint8_t Test;
+uint8_t Test[4] = {'A','B','C','D'};
+uint16_t return_crc_test = 0;
 double var,var1,var2 = 0.0;
 
 /* USER CODE END PV */
@@ -173,9 +174,11 @@ int main(void)
   }
 
 
-  var = 100.0 / 1200.0;
-  var1 = 22.5*33.02;
-  var2 = var+var1;
+
+  return_crc_test = CRC16_buf(Test, 4);
+//  var = 100.0 / 1200.0;
+//  var1 = 22.5*33.02;
+//  var2 = var+var1;
 
 
   /* USER CODE END 2 */
