@@ -1,0 +1,59 @@
+This is BibTeX, Version 0.99d (TeX Live 2020/Arch Linux)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: BA_Paper.aux
+A level-1 auxiliary file: Content//0-Deckblatt.aux
+A level-1 auxiliary file: Content/0-Selbststaendigkeit.aux
+A level-1 auxiliary file: Content/0-Zusammenfassung.aux
+A level-1 auxiliary file: Content/0-Abkuerzungsverzeichnis.aux
+The style file: unsrtnat.bst
+Database file #1: bibliography.bib
+Warning--empty year in ESP8266_Datasheet
+Warning--empty year in STM32_Datasheet
+Warning--empty year in STM32_Ref
+Warning--empty year in ImgParitaet
+Warning--empty year in ImgRXTX
+Warning--empty year in ImgBuffer
+Warning--empty year in HAL_Description
+Warning--empty year in CubeMX
+You've used 13 entries,
+            2481 wiz_defined-function locations,
+            624 strings with 6290 characters,
+and the built_in function-call counts, 3438 in all, are:
+= -- 286
+> -- 91
+< -- 13
++ -- 55
+- -- 26
+* -- 153
+:= -- 531
+add.period$ -- 45
+call.type$ -- 13
+change.case$ -- 23
+chr.to.int$ -- 10
+cite$ -- 21
+duplicate$ -- 197
+empty$ -- 391
+format.name$ -- 39
+if$ -- 745
+int.to.chr$ -- 4
+int.to.str$ -- 14
+missing$ -- 6
+newline$ -- 79
+num.names$ -- 39
+pop$ -- 178
+preamble$ -- 1
+purify$ -- 13
+quote$ -- 0
+skip$ -- 122
+stack$ -- 0
+substring$ -- 26
+swap$ -- 30
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 82
+warning$ -- 8
+while$ -- 26
+width$ -- 0
+write$ -- 171
+(There were 8 warnings)

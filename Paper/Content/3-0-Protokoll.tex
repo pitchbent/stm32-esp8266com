@@ -1,0 +1,144 @@
+\subsection{Protokoll}
+
+Im folgenden soll die Entwicklung des Protokolls erklärt werden. Zuerst wird auf den Algorithmus zur zyklischen Redundanzprüfung eingegangen,
+anschließend auf den Aufbau der übertragenen Nachrichten.
+
+\subsubsection{CRC16-CCITT}
+
+Als Implementation der zyklische Redundanzprüfung wurde die Version \textit{CRC16-CCITT} gewählt, da diese bewährt und gut dokumentiert ist. Leider 
+kursieren viele fehlerhafte Implementationen dieses Algorithmus - es wurde jedoch wert darauf gelegt, die Richtige Version zu implementieren.
+
+\smallskip
+
+Das CRC-Polynom lautet $x^{16}+x^{15}+x^2+1$. Die hexadezimale Repräsentation ergibt sich deshalb zu $0x1021$.
+\smallskip
+
+Als Startwert für die Berechnung wird $0x0$ gewählt - fehlerhafte Implementationen beginnen oftmal mit $0xFFFF$. 
+
+\begin{wraptable}{l}{30mm} 
+    \centering
+\begin{tabular}{ |c | c | c | }
+    \hline
+    a & b & y \\
+    \hline \hline
+    0 & 0 & 0 \\
+    \hline
+    0 & 1 & 1 \\
+    \hline
+    1 & 0 & 1 \\
+    \hline
+    1 & 1 & 0 \\
+    \hline
+\end{tabular}
+\caption{XOR}
+\end{wraptable}
+
+\smallskip
+
+Zwar handelt es sich bei der Berechnung des CRC-Wertes um eine Division, allerdings um eine \textit{Polynom}divsion - diese wird mit Hilfe eines Exklusiv-Oder
+Gatters (\textit{XOR}) und Schieberegistern realisiert. Den zu prüfenden Daten werden abhängig von der Länge des CRC-Polynoms Nullen angehängt, in diesem Falle also 
+16 Stück.
+
+\smallskip
+
+Um die Daten zu Prüfen, wird das CRC-Schieberegister mit '0' initialisiert. Anschließend wird der zu prüfende Wert, mit angehängten Nullen von rechts
+in das Schieberegister "geschoben", bis das \ac{MSB} gleich '1' ist. Anschließend wird das Schieberegister um eine Einheit weitergeschoben, sodass das \ac{MSB}
+herausfällt. Dann wird das Schieberegister mit Hilfe des XOR-Vergleiches mit dem CRC-Polynom verglichen. Der so entstandene Wert wird wieder in das Schieberegister
+übernommen \citep{IK_VL}. 
+
+\smallskip
+
+Nun werden immer wieder Daten von rechts in das Register hineingeschoben. Immer wenn das \ac{MSB} einer '1' entspricht und im nächsten Schritt aus dem Register
+geschoben wird, wird ein XOR-Vergleich mit dem CRC-Polynom durchgeführt. Dies wird so lange wiederholt, bis keine neuen Daten mehr in das Register geschoben werden können.
+Der Wert welcher nun im Schieberegister verbleibt, entspricht der Prüfsumme \citep{IK_VL}.
+
+\smallskip
+
+Die Implementation in C bedient sich zweier Kniffe, um die zuvor erklärte Berechnung zu beschleunigen. Auf ein Initialisieren mit 0x0000 kann verzichtet werden,
+da keine XOR-Vergleiche mit Nullen durchgeführt werden. Der Startwert wird also direkt mit den Eingangsdaten initialisiert werden. Auch auf ein anhängen der Nullen 
+kann verzichtet werden, da der \textit{<<-Operator (left shift)} automatisch am \ac{LSB} Nullen anhängt. 
+
+\newpage
+
+Umgesetzt in C Code entsteht folgende Funktion: 
+
+\begin{lstlisting}
+uint16_t CRC16_buf(const uint8_t * pBuf, uint16_t len) 
+{
+const uint16_t poly = 0x1021;
+uint16_t crc = 0;
+
+for (uint8_t i = 0; i < len; i++)
+{
+    crc ^= pBuf[i] << 8; //Move Byte into 16Bit CRC Register
+
+    for(uint8_t j = 0; j < 8; j++)
+    {
+        if((crc & 0x8000) != 0) //Test for MSB
+        {
+            crc = (crc<<1) ^ poly; //If MSB = 1 shift & XOR
+        }
+        else
+            crc <<= 1;	//If not just shift
+    }
+}
+return crc;
+}
+\end{lstlisting}
+
+Der Funktion wird ein Zeiger zu einem Array übergeben, sowie die Länge dieses Arrays. Die Variable \lstinline!poly! repräsentiert das CRC-Polynom,
+während die Variable \lstinline!crc! für das Schieberegister steht.
+
+\smallskip
+
+Die Berechnung des CRC-Wertes wird für jedes Byte des Arrays durchgeführt, wobei der Startwert für jedes Byte nach dem ersten die CRC-Prüfsumme des 
+letzten Durchlaufes ist. Für jedes Byte wiederrum müssen, auf Grund der länge eines Bytes, acht mal die Shift- und XOR-Operationen durchgeführt werden.
+
+\smallskip
+
+Mittels des Wertes \lstinline!0x8000! wird geprüft, ob das \ac{MSB} gesetzt ist. Der Rückgabewert entspricht der CRC-Prüfsumme. 
+
+\newpage
+
+\subsubsection{Datenformat}
+
+Bei den übertragenen Daten handelt es sich um Zeichen im \acs{ASCII}-Format. Dies vereinfacht die Auswertung und hat den Vorteil, dass die Kommunikation
+zu Testzwecken leicht mitgelesen werden kann. Im folgenden wird unter \textit{Telegramm} die Gesamtheit der übertragenen Daten verstanden, während 
+der Ausdruck \textit{Nachricht} den eigentlichen Informationsgehalt beschreibt.
+
+\smallskip
+
+Ein Telegramm teilt sich in mehrere Teile auf:
+
+\begin{itemize}
+    \item Startzeichen
+    \item Länge
+    \item Nachricht
+    \item CRC-Prüfsumme
+\end{itemize}
+
+
+
+Die verschiedenen Teile bestehen aus einer verschiedenen Anzahl an Bytes. Während Start- und Endzeichen nur ein Byte benötigen, werden für die
+Länge der Nachricht und die CRC-Prüfsumme zwei Bytes benötigt.
+
+\smallskip
+
+\begin{wraptable}{r}{75mm} 
+    
+    \begin{tabular}{ |c | c | c | c | c | c | c | }
+        \hline
+        1 & 2 & 3 & 4 & n+4 & n+5 & n+6  \\
+        \hline \hline
+        Start  & \multicolumn{2}{|c|}{Länge} & \multicolumn{2}{|c|}{Nachricht} & \multicolumn{2}{|c|}{CRC16} \\
+        \hline
+    
+      \end{tabular}
+    \centering
+    \caption{Telegramm}
+    \end{wraptable}
+
+
+Da die Länge der Nachricht aus zwei Bytes besteht, ergibt sich eine maximale Nachrichtenlänge von 99 Bytes. Auf ein Endzeichen wird verzichtet - 
+das Ende des Telegramms berechnet sich aus der Länge der Nachricht. Das Startzeichen entspricht dem \acs{ASCII}-Zeichen '<'.
+
