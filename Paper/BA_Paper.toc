@@ -34,6 +34,9 @@
 \contentsline {subsubsection}{\numberline {3.2.2}STM32: Konfiguration des UART}{21}{subsubsection.3.2.2}%
 \contentsline {subsubsection}{\numberline {3.2.3}STM32: Idle Line Detection}{21}{subsubsection.3.2.3}%
 \contentsline {subsubsection}{\numberline {3.2.4}STM32: Empfangsinterrupt / DMA Circular Buffer}{23}{subsubsection.3.2.4}%
-\contentsline {section}{\nonumberline Abbildungsverzeichnis}{24}{section*.42}%
-\contentsline {section}{\nonumberline Quellenverzeichnis}{25}{section*.44}%
+\contentsline {subsubsection}{\numberline {3.2.5}STM32: Überprüfen der Daten}{25}{subsubsection.3.2.5}%
+\contentsline {subsubsection}{\numberline {3.2.6}ESP8266: Empfang und Überprüfung der Daten}{25}{subsubsection.3.2.6}%
+\contentsline {section}{\nonumberline Abbildungsverzeichnis}{26}{section*.42}%
+\contentsline {section}{\nonumberline Listings}{27}{section*.43}%
+\contentsline {section}{\nonumberline Quellenverzeichnis}{28}{section*.45}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

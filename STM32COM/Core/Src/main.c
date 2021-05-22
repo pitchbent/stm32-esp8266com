@@ -63,14 +63,14 @@ DMA_HandleTypeDef hdma_usart3_tx;
 
 
 
-DMA_STRUCT dma_info = {0,0,DMA_TIMEOUT_MS,DMA_BUF_SIZE};
+DMA_STRUCT dma_info = {0,0,0,DMA_TIMEOUT_MS,DMA_BUF_SIZE,{'\0'}};
 SENS_STRUCT sensor = {0,0,0,0};
 
 
 /*Variables UART*/
 uint8_t dma_rx_buf[DMA_BUF_SIZE];       /* Circular buffer for DMA */
-uint8_t data[DMA_BUF_SIZE] = {'\0'};    /* Data buffer that contains newly received data -*/
-volatile uint8_t data_avaiable = 0;
+//uint8_t data[DMA_BUF_SIZE] = {'\0'};    /* Data buffer that contains newly received data -*/
+
 
 //uint8_t err_msg[4] = {'e','r','r','\n'};
 uint8_t TxBuffer[10];				//Sending buffer
@@ -96,7 +96,7 @@ uint32_t xt_data[2] = {0x266e817d,0xbacd5035}; //2*32Bit Data
 uint32_t xt_key[4] = {KEY1,KEY2,KEY3,KEY4};	  //128Bit Key
 
 
-uint8_t Test[4] = {'A','B','C','D'};
+uint8_t Test[6] = {0x3c,0x30,0x31,0x30,0xa6,0x99};
 uint16_t return_crc_test = 0;
 double var,var1,var2 = 0.0;
 
@@ -157,7 +157,7 @@ int main(void)
   MX_TIM2_Init();
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
-  HAL_ADCEx_Calibration_Start(&hadc1);
+  HAL_ADCEx_Calibration_Start(&hadc1);	//Calibrate ADC
   //HAL_ADC_Start_IT(&hadc1);
 
   //HAL_TIM_Base_Start_IT(&htim2);
@@ -166,7 +166,7 @@ int main(void)
 
 
 
-  __HAL_UART_ENABLE_IT(&huart3,UART_IT_IDLE);
+  __HAL_UART_ENABLE_IT(&huart3,UART_IT_IDLE);			//Enable Idle Line Interrupt
 
   if(HAL_UART_Receive_DMA(&huart3, dma_rx_buf, DMA_BUF_SIZE)==HAL_ERROR)			//Catch possible fault
   {
@@ -175,10 +175,7 @@ int main(void)
 
 
 
-  return_crc_test = CRC16_buf(Test, 4);
-//  var = 100.0 / 1200.0;
-//  var1 = 22.5*33.02;
-//  var2 = var+var1;
+
 
 
   /* USER CODE END 2 */
@@ -226,16 +223,16 @@ int main(void)
 
 
 
-	  if(data_avaiable == 1)
+	  if(dma_info.av_flag == 1)
 	  {
 		  //sensor.calibrated =1;
 		  //sensor.percentage=100;
-		  data_avaiable = 0;
+		  dma_info.av_flag = 0;
 		  //HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-		  data_len = data_check(data);
+		  data_len = data_check(dma_info.data);
 
 		  if (data_len != 0) {
-			  switch (data[3]) {
+			  switch (dma_info.data[3]) {
 
 
 				case STATUS:
@@ -271,7 +268,7 @@ int main(void)
 
 					HAL_Delay(10);
 
-					if (data[4] == '1')
+					if (dma_info.data[4] == '1')
 					{
 						if(sensor.calibrated == 1)
 						{
@@ -670,9 +667,9 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     /* Copy and Process new data */
     for(uint16_t i=0,pos=start; i<length; ++i,++pos)
     {
-        data[i] = dma_rx_buf[pos];
+        dma_info.data[i] = dma_rx_buf[pos];
     }
-    data_avaiable = 1;
+    dma_info.av_flag = 1;
 
     /*Bounce data back if the previous msg was sent out*/
 //    if(dma_info.tx_flag == 0)

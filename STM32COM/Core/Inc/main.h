@@ -52,9 +52,9 @@ extern "C" {
 
 /*Defines protocol*/
 /*Receive Bytes*/
-#define STATUS '0'
-#define CALIBRATE '1'
-#define SEND_VAL '2'
+#define STATUS '1'
+#define CALIBRATE '2'
+#define SEND_VAL '3'
 /*Transmit Bytes*/
 #define BOARD 'B'
 #define ANVALUE 'A'
@@ -84,12 +84,18 @@ void Error_Handler(void);
 #define LED_Pin GPIO_PIN_1
 #define LED_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
+#define OFF_ASCII 48			// The offset from ASCII Number to decimal is 48
+#define OFF_TELE 5				// Complete offset of one telegram, the length of the telegram is length of message + OFF_TELE
+
 typedef struct
 {
     volatile uint8_t  t_flag;   // Timeout event flag -> volatile because it's changed during ISR and read in main
     uint8_t tx_flag;			// Flag for Transmission Cplt
+    volatile uint8_t av_flag;	// New data is avaiable
     uint16_t timer;             // Timeout duration in msec
     uint16_t prevCOUNT;         // Holds previous value of DMA_COUNT
+    uint8_t data[DMA_BUF_SIZE];	// Array for the received Data
+
 } DMA_STRUCT;
 
 typedef struct

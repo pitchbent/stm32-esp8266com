@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Arch Linux) (preloaded format=pdflatex 2021.4.30)  19 MAY 2021 18:19
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Arch Linux) (preloaded format=pdflatex 2021.4.30)  21 MAY 2021 15:44
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -902,22 +902,22 @@ Package: subcaption 2020/10/07 v1.3j Sub-captions (AR)
 \c@subfigure=\count335
 \c@subtable=\count336
 ) (/home/julius/git/stm32com/Paper/BA_Paper.aux (/home/julius/git/stm32com/Paper/Content//0-Deckblatt.aux) (/home/julius/git/stm32com/Paper/Content/0-Selbststaendigkeit.aux) (/home/julius/git/stm32com/Paper/Content/0-Zusammenfassung.aux) (/home/julius/git/stm32com/Paper/Content/0-Abkuerzungsverzeichnis.aux))
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 121.
-LaTeX Font Info:    ... okay on input line 121.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 121.
-LaTeX Font Info:    ... okay on input line 121.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 121.
-LaTeX Font Info:    ... okay on input line 121.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 121.
-LaTeX Font Info:    ... okay on input line 121.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 121.
-LaTeX Font Info:    ... okay on input line 121.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 121.
-LaTeX Font Info:    ... okay on input line 121.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 121.
-LaTeX Font Info:    ... okay on input line 121.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 121.
-LaTeX Font Info:    ... okay on input line 121.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 123.
+LaTeX Font Info:    ... okay on input line 123.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 123.
+LaTeX Font Info:    ... okay on input line 123.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 123.
+LaTeX Font Info:    ... okay on input line 123.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 123.
+LaTeX Font Info:    ... okay on input line 123.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 123.
+LaTeX Font Info:    ... okay on input line 123.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 123.
+LaTeX Font Info:    ... okay on input line 123.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 123.
+LaTeX Font Info:    ... okay on input line 123.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 123.
+LaTeX Font Info:    ... okay on input line 123.
  (/usr/share/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count337
@@ -980,8 +980,8 @@ Package scrhack Info: \landscape patched to make \textheight change optional on 
 Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
 )
 \c@lstlisting=\count343
-Package scrhack Info: undefining \float@addtolists on input line 121.
-Package hyperref Info: Link coloring OFF on input line 121.
+Package scrhack Info: undefining \float@addtolists on input line 123.
+Package hyperref Info: Link coloring OFF on input line 123.
  (/usr/share/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
  (/usr/share/texmf-dist/tex/latex/refcount/refcount.sty
@@ -991,9 +991,9 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
 \c@section@level=\count344
 )
-LaTeX Info: Redefining \ref on input line 121.
-LaTeX Info: Redefining \pageref on input line 121.
-LaTeX Info: Redefining \nameref on input line 121.
+LaTeX Info: Redefining \ref on input line 123.
+LaTeX Info: Redefining \pageref on input line 123.
+LaTeX Info: Redefining \nameref on input line 123.
  (/home/julius/git/stm32com/Paper/BA_Paper.out) (/home/julius/git/stm32com/Paper/BA_Paper.out)
 \@outlinefile=\write4
 Class scrartcl Info: loading recommended package `bookmark'.
@@ -1003,7 +1003,7 @@ Class scrartcl Info: loading recommended package `bookmark'.
 (scrartcl)           `bookmarkpackage=false' before \begin{document} and
 (scrartcl)           you can avoid this message adding:
 (scrartcl)             \usepackage{bookmark}
-(scrartcl)           before \begin{document} on input line 121.
+(scrartcl)           before \begin{document} on input line 123.
  (/usr/share/texmf-dist/tex/latex/bookmark/bookmark.sty
 Package: bookmark 2020-11-06 v1.29 PDF bookmarks (HO)
  (/usr/share/texmf-dist/tex/latex/bookmark/bkm-pdftex.def
@@ -1117,7 +1117,7 @@ Package cleveref Info: loaded `ngerman' language definitions on input line 1.
 
 
 ] (/home/julius/git/stm32com/Paper/Content/1-0-Ziel.tex) (/home/julius/git/stm32com/Paper/Content/1-1-VorhergehendeArbeit.tex
-<Pictures/assembled.jpg, id=179, 3035.34pt x 4047.12pt>
+<Pictures/assembled.jpg, id=185, 3035.34pt x 4047.12pt>
 File: Pictures/assembled.jpg Graphic file (type jpg)
 <use Pictures/assembled.jpg>
 Package pdftex.def Info: Pictures/assembled.jpg  used on input line 9.
@@ -1127,7 +1127,7 @@ although it is yet undefined on input line 28.
 ) (/home/julius/git/stm32com/Paper/Content/1-2-Aufbau.tex) [7
 
  </home/julius/git/stm32com/Paper/Pictures/assembled.jpg>] [8] (/home/julius/git/stm32com/Paper/Content/2-0-Microcontroller.tex
-<Pictures/esp.jpg, id=204, 213.9192pt x 213.9192pt>
+<Pictures/esp.jpg, id=210, 213.9192pt x 213.9192pt>
 File: Pictures/esp.jpg Graphic file (type jpg)
 <use Pictures/esp.jpg>
 Package pdftex.def Info: Pictures/esp.jpg  used on input line 8.
@@ -1136,7 +1136,7 @@ Package acronym Info: Label `acro:RAM' newly defined as it shall be overridden
 although it is yet undefined on input line 13.
 Package acronym Info: Label `acro:UART' newly defined as it shall be overridden
 although it is yet undefined on input line 25.
-<Pictures/stm32f103.jpg, id=219, 127.677pt x 127.677pt>
+<Pictures/stm32f103.jpg, id=225, 127.677pt x 127.677pt>
 File: Pictures/stm32f103.jpg Graphic file (type jpg)
 <use Pictures/stm32f103.jpg>
 Package pdftex.def Info: Pictures/stm32f103.jpg  used on input line 36.
@@ -1149,7 +1149,7 @@ Underfull \hbox (badness 1975) in paragraph at lines 44--47
 ) [9
 
  </home/julius/git/stm32com/Paper/Pictures/esp.jpg> </home/julius/git/stm32com/Paper/Pictures/stm32f103.jpg>] (/home/julius/git/stm32com/Paper/Content/2-1-Peripherie.tex
-<Pictures/dma_channel.png, id=236, 450.68375pt x 499.8675pt>
+<Pictures/dma_channel.png, id=242, 450.68375pt x 499.8675pt>
 File: Pictures/dma_channel.png Graphic file (type png)
 <use Pictures/dma_channel.png>
 Package pdftex.def Info: Pictures/dma_channel.png  used on input line 26.
@@ -1163,19 +1163,19 @@ although it is yet undefined on input line 38.
  </home/julius/git/stm32com/Paper/Pictures/dma_channel.png>]
 Package acronym Info: Label `acro:ADC' newly defined as it shall be overridden
 although it is yet undefined on input line 60.
-<Pictures/adc.png, id=268, 347.2975pt x 155.58125pt>
+<Pictures/adc.png, id=274, 347.2975pt x 155.58125pt>
 File: Pictures/adc.png Graphic file (type png)
 <use Pictures/adc.png>
 Package pdftex.def Info: Pictures/adc.png  used on input line 68.
 (pdftex.def)             Requested size: 208.3801pt x 93.34946pt.
  [11 </home/julius/git/stm32com/Paper/Pictures/adc.png>]
-<Pictures/gpio.png, id=289, 546.04pt x 330.23375pt>
+<Pictures/gpio.png, id=295, 546.04pt x 330.23375pt>
 File: Pictures/gpio.png Graphic file (type png)
 <use Pictures/gpio.png>
 Package pdftex.def Info: Pictures/gpio.png  used on input line 114.
 (pdftex.def)             Requested size: 327.62653pt x 198.14177pt.
  [12 </home/julius/git/stm32com/Paper/Pictures/gpio.png>]
-<Pictures/timer.png, id=298, 544.0325pt x 151.56625pt>
+<Pictures/timer.png, id=304, 544.0325pt x 151.56625pt>
 File: Pictures/timer.png Graphic file (type png)
 <use Pictures/timer.png>
 Package pdftex.def Info: Pictures/timer.png  used on input line 131.
@@ -1186,7 +1186,7 @@ Overfull \hbox (6.29314pt too wide) in paragraph at lines 138--139
  []
 
 ) [13 </home/julius/git/stm32com/Paper/Pictures/timer.png>] (/home/julius/git/stm32com/Paper/Content/2-2-Protokolle.tex
-<Pictures/paritaet.png, id=308, 803.0pt x 1272.755pt>
+<Pictures/paritaet.png, id=314, 803.0pt x 1272.755pt>
 File: Pictures/paritaet.png Graphic file (type png)
 <use Pictures/paritaet.png>
 Package pdftex.def Info: Pictures/paritaet.png  used on input line 14.
@@ -1198,7 +1198,7 @@ Overfull \hbox (5.05743pt too wide) in paragraph at lines 51--55
 [] []\T1/cmss/bx/n/10.95 Erklärung[][] \T1/cmr/m/n/10.95 Der Uni-ver-sal Asyn-chro-nous Re-cei-ver Trans-mit-ter[] ist ei-ne elek-tro-ni-sche Schal-
  []
 
-<Pictures/uart_rx_tx.png, id=334, 296.60812pt x 179.92218pt>
+<Pictures/uart_rx_tx.png, id=340, 296.60812pt x 179.92218pt>
 File: Pictures/uart_rx_tx.png Graphic file (type png)
 <use Pictures/uart_rx_tx.png>
 Package pdftex.def Info: Pictures/uart_rx_tx.png  used on input line 62.
@@ -1208,18 +1208,18 @@ Overfull \hbox (7.99503pt too wide) in paragraph at lines 62--63
  [][] 
  []
 
-<Pictures/uart_framing.png, id=342, 1230.09563pt x 164.86594pt>
+<Pictures/uart_framing.png, id=348, 1230.09563pt x 164.86594pt>
 File: Pictures/uart_framing.png Graphic file (type png)
 <use Pictures/uart_framing.png>
 Package pdftex.def Info: Pictures/uart_framing.png  used on input line 92.
 (pdftex.def)             Requested size: 369.03154pt x 49.46014pt.
-<Pictures/uart_ok.png, id=347, 1345.27594pt x 176.15813pt>
+<Pictures/uart_ok.png, id=353, 1345.27594pt x 176.15813pt>
 File: Pictures/uart_ok.png Graphic file (type png)
 <use Pictures/uart_ok.png>
 Package pdftex.def Info: Pictures/uart_ok.png  used on input line 106.
 (pdftex.def)             Requested size: 403.5859pt x 52.84784pt.
 ) [15 </home/julius/git/stm32com/Paper/Pictures/uart_rx_tx.png> </home/julius/git/stm32com/Paper/Pictures/uart_framing.png> </home/julius/git/stm32com/Paper/Pictures/uart_ok.png>] (/home/julius/git/stm32com/Paper/Content/2-3-Datenstrukturen.tex
-<Pictures/circular_buffer.png, id=363, 1927.2pt x 419.5675pt>
+<Pictures/circular_buffer.png, id=369, 1927.2pt x 419.5675pt>
 File: Pictures/circular_buffer.png Graphic file (type png)
 <use Pictures/circular_buffer.png>
 Package pdftex.def Info: Pictures/circular_buffer.png  used on input line 8.
@@ -1230,20 +1230,20 @@ Overfull \hbox (4.5184pt too wide) in paragraph at lines 8--9
  []
 
 Package acronym Info: Label `acro:HAL' newly defined as it shall be overridden
-although it is yet undefined on input line 64.
+although it is yet undefined on input line 65.
 [16
 
  </home/julius/git/stm32com/Paper/Pictures/circular_buffer.png>]
-LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 77.
+LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 78.
  (/usr/share/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
 Package acronym Info: Label `acro:I2C' newly defined as it shall be overridden
-although it is yet undefined on input line 86.
-<Pictures/cubeMX.png, id=390, 1209.51875pt x 609.27625pt>
+although it is yet undefined on input line 87.
+<Pictures/cubeMX.png, id=396, 1209.51875pt x 609.27625pt>
 File: Pictures/cubeMX.png Graphic file (type png)
 <use Pictures/cubeMX.png>
-Package pdftex.def Info: Pictures/cubeMX.png  used on input line 94.
+Package pdftex.def Info: Pictures/cubeMX.png  used on input line 95.
 (pdftex.def)             Requested size: 362.85843pt x 182.78427pt.
 ) [17 </home/julius/git/stm32com/Paper/Pictures/cubeMX.png>] (/home/julius/git/stm32com/Paper/Content/3-0-Protokoll.tex
 Package acronym Info: Label `acro:MSB' newly defined as it shall be overridden
@@ -1257,12 +1257,12 @@ Overfull \hbox (0.58847pt too wide) in paragraph at lines 8--10
 \T1/cmr/m/n/10.95 Struk-tur-va-ria-ble de-fi-niert, wel-che hier-mit ein-ge-führt wird. Die Struk-tur-va-ria-ble [][][]
  []
 
-<Pictures/parameter_uart.png, id=461, 668.4975pt x 504.88625pt>
+<Pictures/parameter_uart.png, id=467, 668.4975pt x 504.88625pt>
 File: Pictures/parameter_uart.png Graphic file (type png)
 <use Pictures/parameter_uart.png>
 Package pdftex.def Info: Pictures/parameter_uart.png  used on input line 40.
 (pdftex.def)             Requested size: 188.21289pt x 142.14528pt.
-<Pictures/dma_uart.png, id=462, 666.49pt x 510.90875pt>
+<Pictures/dma_uart.png, id=468, 666.49pt x 510.90875pt>
 File: Pictures/dma_uart.png Graphic file (type png)
 <use Pictures/dma_uart.png>
 Package pdftex.def Info: Pictures/dma_uart.png  used on input line 47.
@@ -1272,11 +1272,17 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 [21
 
-] [22 </home/julius/git/stm32com/Paper/Pictures/parameter_uart.png> </home/julius/git/stm32com/Paper/Pictures/dma_uart.png>]) [23] (/home/julius/git/stm32com/Paper/BA_Paper.lof
+] [22 </home/julius/git/stm32com/Paper/Pictures/parameter_uart.png> </home/julius/git/stm32com/Paper/Pictures/dma_uart.png>] [23] [24]) [25] (/home/julius/git/stm32com/Paper/BA_Paper.lof
 Package cleveref Info: loaded `ngerman' language definitions on input line 1.
 )
 \tf@lof=\write6
- [24
+ [26
+
+] (/home/julius/git/stm32com/Paper/BA_Paper.lol
+Package cleveref Info: loaded `ngerman' language definitions on input line 1.
+)
+\tf@lol=\write7
+ [27
 
 ] (/home/julius/git/stm32com/Paper/BA_Paper.bbl
 Underfull \hbox (badness 2951) in paragraph at lines 64--69
@@ -1293,9 +1299,9 @@ Underfull \hbox (badness 10000) in paragraph at lines 82--86
 []\T1/cmr/m/n/10.95 ST.  Cu-bemx, .  URL []$\T1/cmtt/m/n/10.95 https : / / www\OML/cmm/m/it/10.95 :\T1/cmtt/m/n/10.95 st\OML/cmm/m/it/10.95 :\T1/cmtt/m/n/10.95 com / en / development -[] tools /
  []
 
-) [25
+) [28
 
-] [26
+] [29
 
 ] (/home/julius/git/stm32com/Paper/BA_Paper.aux (/home/julius/git/stm32com/Paper/Content//0-Deckblatt.aux)
 Package cleveref Info: loaded `ngerman' language definitions on input line 26.
@@ -1308,18 +1314,18 @@ LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 39843 strings out of 479383
- 917847 string characters out of 5875830
+ 39913 strings out of 479383
+ 918782 string characters out of 5875830
  1523315 words of memory out of 5000000
- 55992 multiletter control sequences out of 15000+600000
+ 56021 multiletter control sequences out of 15000+600000
  421785 words of font info for 62 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 106i,20n,111p,10637b,1182s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 106i,20n,111p,10637b,1949s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfbx2488.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm0900.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfsx1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfsx1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfsx1440.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfti1000.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfti1095.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sftt0900.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sftt1095.pfb>
-Output written on /home/julius/git/stm32com/Paper/BA_Paper.pdf (26 pages, 2673334 bytes).
+Output written on /home/julius/git/stm32com/Paper/BA_Paper.pdf (29 pages, 2679734 bytes).
 PDF statistics:
- 790 PDF objects out of 1000 (max. 8388607)
- 706 compressed objects within 8 object streams
- 195 named destinations out of 1000 (max. 500000)
- 357 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 870 PDF objects out of 1000 (max. 8388607)
+ 783 compressed objects within 8 object streams
+ 233 named destinations out of 1000 (max. 500000)
+ 381 words of extra memory for PDF output out of 10000 (max. 10000000)
 

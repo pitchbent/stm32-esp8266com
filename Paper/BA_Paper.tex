@@ -100,11 +100,13 @@ pdfpagelabels,%
 %\cfoot[]{}	%[fuer plain configuration]{fuer scrheadings configuration}
 
 \usepackage[hang]{caption}
-\usepackage[format=hang,justification=raggedright,singlelinecheck=false]{caption}
+\usepackage[format=hang,justification=centering,singlelinecheck=false]{caption}
 \clearcaptionsetup{figure}
 \captionsetup[figure]{font=small,format=hang,justification=centerlast, singlelinecheck=true}
 \clearcaptionsetup{table}
 \captionsetup[table]{font=small,format=hang,justification=centerlast, singlelinecheck=true}
+
+
 
 \usepackage{pgfplots}
 \pgfplotsset{
@@ -160,6 +162,8 @@ pdfpagelabels,%
 
 %include list of figure
 \listoffigures
+\clearpage
+\lstlistoflistings
 \clearpage
 %
 %include list of tables

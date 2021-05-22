@@ -1,13 +1,13 @@
 #include <Arduino.h>
 
+#include <main.h>
+
 #include <ESP8266WiFi.h>
 #include <xtea.h>
 #include <crc16ccitt.h>
 #include <uartcom.h>
 #include <PubSubClient.h>
 
-#define BAUD 115200
-#define START_MARKER '<'
 
 const char* ssid = "WuTangLAN";
 const char* password = "11933793430981488313";
@@ -49,7 +49,7 @@ void setup() {
     Serial.begin(BAUD);
     Serial.println("ready");
 
-    setup_wifi();
+    //setup_wifi();
     client.setServer(mqtt_server,1883);
     client.setCallback(callback);
 
@@ -60,16 +60,21 @@ void setup() {
 void loop() {
 
     receive();
-    if (!client.connected()) {
-    reconnect();
-    }
-    if(!client.loop())
-    client.connect("ESP8266Client");
+    // if (!client.connected()) {
+    // reconnect();
+    // }
+    // if(!client.loop())
+    // client.connect("ESP8266Client");
     if (newData == true)
     {
     Serial.println("pub mq");
-    client.publish("testTopic",receivedChars+3,length_pub);
-    client.publish("testTopic","test");
+    for (uint8_t i = 0; i <= 6; i++)
+    {
+      Serial.print(receivedChars[i],HEX);
+    }
+    
+    // client.publish("testTopic",receivedChars+3,length_pub);
+    // client.publish("testTopic","test");
    
     newData = false;
     }
@@ -81,7 +86,7 @@ void receive()
   static uint16_t count = 0;
   static bool InProg = false;
   static uint8_t len= 0;
-  uint16_t crc, crc_calc;
+  uint16_t crc_calc;
   static uint32_t tim;
   
   /*Check for timeout*/
@@ -105,16 +110,17 @@ void receive()
 
       if(InProg == true && count == 2) //2 -> the second length byte was stored
       {
-        len = (receivedChars[count]-48)+((receivedChars[count-1]-48)*10);
+        len = (receivedChars[count]-OFF_ASCII)+((receivedChars[count-1]-OFF_ASCII)*10);
       }
 
       if(InProg == true && count == len+4) //len +4 -> the second crc byte was stored
       {
-        crc = ((receivedChars[count-1] << 8)| receivedChars[count]);  //concatenate the two crc bytes
+        //crc = ((receivedChars[count-1] << 8)| receivedChars[count]);  //concatenate the two crc bytes
 
-        crc_calc = CRC16_buf(receivedChars,count-1);  //ignore last two bytes
-
-        if(crc == crc_calc)
+        crc_calc = CRC16_buf(receivedChars,count+1);  //count +1 because it gets iterated at the end
+        Serial.print("Calced CRC value: ");
+        Serial.println(crc_calc,HEX);
+        if(crc_calc == 0)
         {
           length_pub = len; //pass the count
           InProg = false; //reset

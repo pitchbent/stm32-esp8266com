@@ -8,7 +8,7 @@ die Nutzung seiner \ac{DMA}-Funktionalität, während auf dem ESP8266 eine Inter
 Aus Gründen der Übersichtlichkeit wurde für die Datenverarbeitung des STM32 eine Strukturvariable definiert, welche hiermit eingeführt wird.
 Die Strukturvariable \lstinline!DMA_STRUCT! enthält mehrere weitere Variablen für Flags und Zähler.
 
-\begin{lstlisting}
+\begin{lstlisting}[caption={\textit{DMA Strukturvariable}}]
 typedef struct
 {
     volatile uint8_t  t_flag;   
@@ -65,7 +65,7 @@ direkt vom Speicher zum \ac{UART} weitergeleitet werden. Zudem wird der Empfang 
   
   \lstinline!void USARTX_IRQHandler(void)! folgendermaßen erweitert werden:
 
-  \begin{lstlisting}
+  \begin{lstlisting}[caption={\textit{Idle Line Interrupt}}]
     if(__HAL_UART_GET_FLAG(&huartx,UART_FLAG_IDLE))
     {
         __HAL_UART_CLEAR_IDLEFLAG(&huartx);
@@ -88,7 +88,7 @@ direkt vom Speicher zum \ac{UART} weitergeleitet werden. Zudem wird der Empfang 
   welche im 10ms-Takt aufgerufen wird. Diese Routine ist ebenfalls in der Datei \lstinline!stm32fxx_it.c! zu finden und wird um folgenden Code
   erweitert:
 
-  \begin{lstlisting}
+  \begin{lstlisting}[caption={\textit{Systick Timer}}]
     if(dma_info.timer == 1)
     {
         dma_info.t_flag = 1;
@@ -116,12 +116,12 @@ direkt vom Speicher zum \ac{UART} weitergeleitet werden. Zudem wird der Empfang 
 
   \smallskip
 
-  Die Interruptroutine sind nach der Generation von Code mittels CubeMX in der Datei \lstinline!stm32f1xx_hal.c! als \lstinline!__weak!
+  Die Interruptroutinen sind nach der Generation von Code mittels CubeMX in der Datei \lstinline!stm32f1xx_hal.c! als \lstinline!__weak!
   definiert, werden also neu gesetzt sobald sie ohne das Keyword \lstinline!__weak! definiert werden \citep{HAL_Description}. 
 
   \smallskip
 
-  In \lstinline!main.c! wird die Interruptroutine mit dem Namen 
+  In \lstinline!main.c! wird die Interruptroutine für den Empfang von Daten per \ac{UART} mit dem Namen 
   \begin{lstlisting}
     void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
   \end{lstlisting}
@@ -150,11 +150,94 @@ direkt vom Speicher zum \ac{UART} weitergeleitet werden. Zudem wird der Empfang 
   \begin{lstlisting}
     dma_info.prevCOUNT = DMA_BUF_SIZE;      
   \end{lstlisting}
+
+  \newpage
+  
   Wird nun ein Timeout-Interrupt ausgelöst, wird die Routine durch folgenden Code frühzeitig abgebrochen und das Flag rückgesetzt:
-  \begin{lstlisting}
+  \begin{lstlisting}[caption={\textit{Abbruch Timeoutinterrupt}}]
     if(dma_info.t_flag && currCOUNT == DMA_BUF_SIZE)
     {
         dma_info.t_flag = 0;
         return;
     }
   \end{lstlisting}
+
+  \smallskip
+
+  Tritt ein Interrupt auf, weil ein Timeout aufgetreten ist, muss unterschieden werden ob im Buffer bereits alte Daten liegen, welche ignoriert
+  werden müssen oder ob der Buffer mit zu verarbeitenden Daten gefüllt ist. Folgender Code implementiert dies:
+
+  \begin{lstlisting}[caption={\textit{Längenberechnung Timeout}}]
+    if(dma_info.t_flag)
+    {
+    	if(dma_info.prevCOUNT < DMA_BUF_SIZE)
+    	{
+    		length = dma_info.prevCOUNT - currCOUNT;
+    	}
+    	else
+    	{
+  		length = DMA_BUF_SIZE - currCOUNT;
+  	}
+
+        dma_info.prevCOUNT = currCOUNT;
+        dma_info.t_flag = 0;
+    }
+  \end{lstlisting}
+
+  Wenn ein Timeout-Flag aufgetreten ist, wird geprüft ob der alte Zähler des Ringbuffers kleiner als die Buffergröße ist. Ist dies der Fall, berechnet
+  sich die Länge der Daten durch die Differenz zwischen dem alten und dem neuen Zählerwert, da noch alte Daten im Buffer gespeichert sind.
+  
+  Wenn keine alten Daten im Buffer gespeichert sind, berechnet sich die Länge durch die Differenz zwischen der Buffergröße und der aktuellen Zählerposition.
+
+  \smallskip
+
+  Im Anschluss wird der Zählerwert des \ac{DMA} übergeben und das Timeout-Flag rückgesetzt.
+
+  \newpage
+
+  Die Startposition der neuen Daten berechnet sich ähnlich. Ist der alte Zähler des Ringbuffers kleiner als die Buffergröße, ist die Startposition
+  die Differenz zwischen der Buffergröße und des alten Zählerwerts. Wenn nicht, ist die Startposition gleich null.
+
+  \begin{lstlisting}[caption={\textit{Berechnung Startposition}}]
+    if(dma_info.prevCOUNT<DMA_BUF_SIZE)
+    {
+    	start = (DMA_BUF_SIZE-dma_info.prevCOUNT);
+    }
+    else
+    {
+    	start = 0;
+    }  
+  \end{lstlisting}
+
+  \smallskip
+
+  Mit Hilfe der berechneten Werten für die Startposition und die Länge der empfangenen Daten werden diese Daten zu guter Letzt in ein dediziertes
+  Array zur Weiterverarbeitung kopiert und ein Flag gesetzt, welches anzeigt, dass neue Daten vorhanden sind:
+  
+  \begin{lstlisting}[caption={\textit{Kopieren neuer Daten}}]
+    for(uint16_t i=0,pos=start; i<length; ++i,++pos)
+    {
+        data[i] = dma_rx_buf[pos];
+    }
+    data_avaiable = 1;
+  \end{lstlisting}
+
+  Mit den Informationen über das Protokoll aus \ref{subsub: Datenformat} lassen sich nun aus dem Array in dem die angekommenen Daten gespeichert wurden, die Telegramme extrahieren.
+
+\subsubsection{STM32: Überprüfen der Daten}
+
+Die empfangenen Daten müssen auf ihre Integrität getestet werden. Dazu wurde in \ref{subsub: CRC16} das Konzept der zyklischen Redundanzprüfung eingeführt.
+
+\smallskip
+
+Um die empfangenen Daten zu prüfen, wird das Array welches die Daten enthält der Funktion 
+\begin{lstlisting}
+  uint8_t data_check(uint8_t *dat)
+\end{lstlisting}
+übergeben. Diese Funktion extrahiert die CRC-Prüfsumme sowie die Länge der Nachricht und validiert diese. Wenn die zyklische Redundanzprüfung erfolgreich
+ist, wird die Länge der Nachricht übergeben. Wenn sie fehlschlägt, wird eine null zurückgegeben.
+
+
+\subsubsection{ESP8266: Empfang und Überprüfung der Daten}
+
+Die Implementation für den Empfang von Daten 

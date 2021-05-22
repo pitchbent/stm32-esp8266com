@@ -62,7 +62,7 @@ kann verzichtet werden, da der \textit{<<-Operator (left shift)} automatisch am 
 
 Umgesetzt in C Code entsteht folgende Funktion: 
 
-\begin{lstlisting}
+\begin{lstlisting}[caption={\textit{Berechnung CRC16}}]
 uint16_t CRC16_buf(const uint8_t * pBuf, uint16_t len) 
 {
 const uint16_t poly = 0x1021;
@@ -101,6 +101,7 @@ Mittels des Wertes \lstinline!0x8000! wird geprüft, ob das \ac{MSB} gesetzt ist
 \newpage
 
 \subsubsection{Datenformat}
+\label{subsub: Datenformat}
 
 Bei den übertragenen Daten handelt es sich um Zeichen im \acs{ASCII}-Format. Dies vereinfacht die Auswertung und hat den Vorteil, dass die Kommunikation
 zu Testzwecken leicht mitgelesen werden kann. Im folgenden wird unter \textit{Telegramm} die Gesamtheit der übertragenen Daten verstanden, während 
