@@ -15,45 +15,46 @@ Warning--empty year in ImgRXTX
 Warning--empty year in ImgBuffer
 Warning--empty year in HAL_Description
 Warning--empty year in CubeMX
-You've used 13 entries,
+Warning--empty year in ArduinoRef
+You've used 14 entries,
             2481 wiz_defined-function locations,
-            624 strings with 6290 characters,
-and the built_in function-call counts, 3438 in all, are:
-= -- 286
-> -- 91
-< -- 13
-+ -- 55
-- -- 26
-* -- 153
-:= -- 531
-add.period$ -- 45
-call.type$ -- 13
-change.case$ -- 23
-chr.to.int$ -- 10
-cite$ -- 21
-duplicate$ -- 197
-empty$ -- 391
-format.name$ -- 39
-if$ -- 745
+            630 strings with 6411 characters,
+and the built_in function-call counts, 3703 in all, are:
+= -- 309
+> -- 98
+< -- 14
++ -- 59
+- -- 28
+* -- 164
+:= -- 571
+add.period$ -- 49
+call.type$ -- 14
+change.case$ -- 25
+chr.to.int$ -- 11
+cite$ -- 23
+duplicate$ -- 211
+empty$ -- 421
+format.name$ -- 42
+if$ -- 803
 int.to.chr$ -- 4
-int.to.str$ -- 14
+int.to.str$ -- 15
 missing$ -- 6
-newline$ -- 79
-num.names$ -- 39
-pop$ -- 178
+newline$ -- 85
+num.names$ -- 42
+pop$ -- 193
 preamble$ -- 1
-purify$ -- 13
+purify$ -- 14
 quote$ -- 0
-skip$ -- 122
+skip$ -- 131
 stack$ -- 0
-substring$ -- 26
-swap$ -- 30
+substring$ -- 28
+swap$ -- 32
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 82
-warning$ -- 8
-while$ -- 26
+type$ -- 89
+warning$ -- 9
+while$ -- 28
 width$ -- 0
-write$ -- 171
-(There were 8 warnings)
+write$ -- 184
+(There were 9 warnings)

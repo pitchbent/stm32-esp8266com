@@ -1,42 +1,43 @@
 \babel@toc {ngerman}{}
 \contentsline {section}{Selbstständigkeitserklärung}{3}{section*.2}%
 \contentsline {section}{Zusammenfassung}{4}{section*.3}%
-\contentsline {section}{\numberline {1}Einführung}{7}{section.1}%
-\contentsline {subsection}{\numberline {1.1}Vorhergegangene Arbeit}{7}{subsection.1.1}%
-\contentsline {subsection}{\numberline {1.2}Aufbau der Arbeit}{7}{subsection.1.2}%
-\contentsline {section}{\numberline {2}Grundlagen}{9}{section.2}%
-\contentsline {subsection}{\numberline {2.1}Microcontroller}{9}{subsection.2.1}%
-\contentsline {subsubsection}{\numberline {2.1.1}ESP8266}{9}{subsubsection.2.1.1}%
-\contentsline {subsubsection}{\numberline {2.1.2}STM32F103}{9}{subsubsection.2.1.2}%
-\contentsline {subsection}{\numberline {2.2}Peripherie}{10}{subsection.2.2}%
-\contentsline {subsubsection}{\numberline {2.2.1}UART/USART}{10}{subsubsection.2.2.1}%
-\contentsline {subsubsection}{\numberline {2.2.2}DMA}{10}{subsubsection.2.2.2}%
-\contentsline {subsubsection}{\numberline {2.2.3}ADC}{11}{subsubsection.2.2.3}%
-\contentsline {subsubsection}{\numberline {2.2.4}GPIO}{12}{subsubsection.2.2.4}%
-\contentsline {subsubsection}{\numberline {2.2.5}Timer}{13}{subsubsection.2.2.5}%
-\contentsline {subsection}{\numberline {2.3}Protokolle}{14}{subsection.2.3}%
-\contentsline {subsubsection}{\numberline {2.3.1}UART}{14}{subsubsection.2.3.1}%
-\contentsline {paragraph}{\nonumberline Grundlagen}{14}{paragraph*.22}%
-\contentsline {subparagraph}{\nonumberline Parität}{14}{subparagraph*.24}%
-\contentsline {subparagraph}{\nonumberline Baudrate}{14}{subparagraph*.27}%
-\contentsline {paragraph}{\nonumberline Erklärung}{15}{paragraph*.29}%
-\contentsline {subsubsection}{\numberline {2.3.2}MQTT}{15}{subsubsection.2.3.2}%
-\contentsline {subsection}{\numberline {2.4}Datenstrukturen und Algorithmen}{16}{subsection.2.4}%
-\contentsline {subsubsection}{\numberline {2.4.1}Ringbuffer}{16}{subsubsection.2.4.1}%
-\contentsline {subsubsection}{\numberline {2.4.2}Zyklische Redundanzprüfung}{16}{subsubsection.2.4.2}%
-\contentsline {subsection}{\numberline {2.5}STM32 Hardware Abstraction Layer und CubeMX}{16}{subsection.2.5}%
-\contentsline {section}{\numberline {3}Umsetzung}{18}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Protokoll}{18}{subsection.3.1}%
-\contentsline {subsubsection}{\numberline {3.1.1}CRC16-CCITT}{18}{subsubsection.3.1.1}%
-\contentsline {subsubsection}{\numberline {3.1.2}Datenformat}{20}{subsubsection.3.1.2}%
-\contentsline {subsection}{\numberline {3.2}Empfang von Daten}{21}{subsection.3.2}%
-\contentsline {subsubsection}{\numberline {3.2.1}STM32: Strukturvariable DMA\_STRUCT}{21}{subsubsection.3.2.1}%
-\contentsline {subsubsection}{\numberline {3.2.2}STM32: Konfiguration des UART}{21}{subsubsection.3.2.2}%
-\contentsline {subsubsection}{\numberline {3.2.3}STM32: Idle Line Detection}{21}{subsubsection.3.2.3}%
-\contentsline {subsubsection}{\numberline {3.2.4}STM32: Empfangsinterrupt / DMA Circular Buffer}{23}{subsubsection.3.2.4}%
-\contentsline {subsubsection}{\numberline {3.2.5}STM32: Überprüfen der Daten}{25}{subsubsection.3.2.5}%
-\contentsline {subsubsection}{\numberline {3.2.6}ESP8266: Empfang und Überprüfung der Daten}{25}{subsubsection.3.2.6}%
-\contentsline {section}{\nonumberline Abbildungsverzeichnis}{26}{section*.42}%
-\contentsline {section}{\nonumberline Listings}{27}{section*.43}%
-\contentsline {section}{\nonumberline Quellenverzeichnis}{28}{section*.45}%
+\contentsline {section}{\numberline {1}Einführung}{8}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Vorhergegangene Arbeit}{8}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Aufbau der Arbeit}{8}{subsection.1.2}%
+\contentsline {section}{\numberline {2}Grundlagen}{10}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Microcontroller}{10}{subsection.2.1}%
+\contentsline {subsubsection}{\numberline {2.1.1}ESP8266}{10}{subsubsection.2.1.1}%
+\contentsline {subsubsection}{\numberline {2.1.2}STM32F103}{10}{subsubsection.2.1.2}%
+\contentsline {subsection}{\numberline {2.2}Peripherie}{11}{subsection.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.1}UART/USART}{11}{subsubsection.2.2.1}%
+\contentsline {subsubsection}{\numberline {2.2.2}DMA}{11}{subsubsection.2.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.3}ADC}{12}{subsubsection.2.2.3}%
+\contentsline {subsubsection}{\numberline {2.2.4}GPIO}{13}{subsubsection.2.2.4}%
+\contentsline {subsubsection}{\numberline {2.2.5}Timer}{14}{subsubsection.2.2.5}%
+\contentsline {subsection}{\numberline {2.3}Protokolle}{15}{subsection.2.3}%
+\contentsline {subsubsection}{\numberline {2.3.1}UART}{15}{subsubsection.2.3.1}%
+\contentsline {paragraph}{\nonumberline Grundlagen}{15}{paragraph*.22}%
+\contentsline {subparagraph}{\nonumberline Parität}{15}{subparagraph*.24}%
+\contentsline {subparagraph}{\nonumberline Baudrate}{15}{subparagraph*.27}%
+\contentsline {paragraph}{\nonumberline Erklärung}{16}{paragraph*.29}%
+\contentsline {subsubsection}{\numberline {2.3.2}MQTT}{16}{subsubsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.4}Datenstrukturen und Algorithmen}{17}{subsection.2.4}%
+\contentsline {subsubsection}{\numberline {2.4.1}Ringbuffer}{17}{subsubsection.2.4.1}%
+\contentsline {subsubsection}{\numberline {2.4.2}Zyklische Redundanzprüfung}{17}{subsubsection.2.4.2}%
+\contentsline {subsection}{\numberline {2.5}STM32 Hardware Abstraction Layer und CubeMX}{17}{subsection.2.5}%
+\contentsline {section}{\numberline {3}Umsetzung}{19}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Protokoll}{19}{subsection.3.1}%
+\contentsline {subsubsection}{\numberline {3.1.1}CRC16-CCITT}{19}{subsubsection.3.1.1}%
+\contentsline {subsubsection}{\numberline {3.1.2}Datenformat}{21}{subsubsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.2}Übertragung von Daten}{22}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}STM32: Strukturvariable DMA\_STRUCT}{22}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}STM32: Konfiguration des UART}{22}{subsubsection.3.2.2}%
+\contentsline {subsubsection}{\numberline {3.2.3}STM32: Idle Line Detection}{23}{subsubsection.3.2.3}%
+\contentsline {subsubsection}{\numberline {3.2.4}STM32: Empfangsinterrupt / DMA Circular Buffer}{24}{subsubsection.3.2.4}%
+\contentsline {subsubsection}{\numberline {3.2.5}STM32: Überprüfen der Daten}{26}{subsubsection.3.2.5}%
+\contentsline {subsubsection}{\numberline {3.2.6}STM32: Versenden von Daten}{27}{subsubsection.3.2.6}%
+\contentsline {subsubsection}{\numberline {3.2.7}ESP8266: Empfang und Überprüfung der Daten}{27}{subsubsection.3.2.7}%
+\contentsline {section}{\nonumberline Abbildungsverzeichnis}{31}{section*.42}%
+\contentsline {section}{\nonumberline Listings}{32}{section*.43}%
+\contentsline {section}{\nonumberline Quellenverzeichnis}{33}{section*.45}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

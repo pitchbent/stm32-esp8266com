@@ -1,16 +1,16 @@
 \babel@toc {ngerman}{}
-\contentsline {figure}{\numberline {1}{\ignorespaces \textit {IoT-Gateway \citep {IoTGateway}}\relax }}{7}{figure.caption.8}%
-\contentsline {figure}{\numberline {2}{\ignorespaces \textit {ESP8266 WROOM-02}\relax }}{9}{figure.caption.10}%
-\contentsline {figure}{\numberline {3}{\ignorespaces \textit {STM32F103C8}\relax }}{9}{figure.caption.13}%
-\contentsline {figure}{\numberline {4}{\ignorespaces \textit {DMA \citep {MasteringSTM}}\relax }}{10}{figure.caption.14}%
-\contentsline {figure}{\numberline {5}{\ignorespaces \textit {Aufbau \citep {MasteringSTM}}\relax }}{11}{figure.caption.18}%
-\contentsline {figure}{\numberline {6}{\ignorespaces \textit {Beschaltung \citep {STM32_Ref}}\relax }}{12}{figure.caption.19}%
-\contentsline {figure}{\numberline {7}{\ignorespaces \textit {Timer \citep {STM32_Datasheet}}\relax }}{13}{figure.caption.20}%
-\contentsline {figure}{\numberline {8}{\ignorespaces \textit {Parität \citep {ImgParitaet}}\relax }}{14}{figure.caption.25}%
-\contentsline {figure}{\numberline {9}{\ignorespaces \textit {Verbindung \citep {ImgRXTX}}\relax }}{15}{figure.caption.30}%
-\contentsline {figure}{\numberline {10}{\ignorespaces \textit {Framing \citep {ImgRXTX}}\relax }}{15}{figure.caption.31}%
-\contentsline {figure}{\numberline {11}{\ignorespaces \textit {Nachricht 'OK' \citep {ImgRXTX}}\relax }}{15}{figure.caption.32}%
-\contentsline {figure}{\numberline {12}{\ignorespaces \textit {Ringbuffer \citep {ImgBuffer}}\relax }}{16}{figure.caption.33}%
-\contentsline {figure}{\numberline {13}{\ignorespaces \textit {CubeMX}\relax }}{17}{figure.caption.36}%
-\contentsline {figure}{\numberline {14}{\ignorespaces Konfiguration des \acp {UART}\relax }}{22}{figure.caption.41}%
+\contentsline {figure}{\numberline {1}{\ignorespaces \textit {IoT-Gateway \citep {IoTGateway}}\relax }}{8}{figure.caption.8}%
+\contentsline {figure}{\numberline {2}{\ignorespaces \textit {ESP8266 WROOM-02}\relax }}{10}{figure.caption.10}%
+\contentsline {figure}{\numberline {3}{\ignorespaces \textit {STM32F103C8}\relax }}{10}{figure.caption.13}%
+\contentsline {figure}{\numberline {4}{\ignorespaces \textit {DMA \citep {MasteringSTM}}\relax }}{11}{figure.caption.14}%
+\contentsline {figure}{\numberline {5}{\ignorespaces \textit {Aufbau \citep {MasteringSTM}}\relax }}{12}{figure.caption.18}%
+\contentsline {figure}{\numberline {6}{\ignorespaces \textit {Beschaltung \citep {STM32_Ref}}\relax }}{13}{figure.caption.19}%
+\contentsline {figure}{\numberline {7}{\ignorespaces \textit {Timer \citep {STM32_Datasheet}}\relax }}{14}{figure.caption.20}%
+\contentsline {figure}{\numberline {8}{\ignorespaces \textit {Parität \citep {ImgParitaet}}\relax }}{15}{figure.caption.25}%
+\contentsline {figure}{\numberline {9}{\ignorespaces \textit {Verbindung \citep {ImgRXTX}}\relax }}{16}{figure.caption.30}%
+\contentsline {figure}{\numberline {10}{\ignorespaces \textit {Framing \citep {ImgRXTX}}\relax }}{16}{figure.caption.31}%
+\contentsline {figure}{\numberline {11}{\ignorespaces \textit {Nachricht 'OK' \citep {ImgRXTX}}\relax }}{16}{figure.caption.32}%
+\contentsline {figure}{\numberline {12}{\ignorespaces \textit {Ringbuffer \citep {ImgBuffer}}\relax }}{17}{figure.caption.33}%
+\contentsline {figure}{\numberline {13}{\ignorespaces \textit {CubeMX}\relax }}{18}{figure.caption.36}%
+\contentsline {figure}{\numberline {14}{\ignorespaces Konfiguration des \acp {UART}\relax }}{23}{figure.caption.41}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

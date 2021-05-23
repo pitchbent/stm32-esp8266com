@@ -202,6 +202,7 @@ int main(void)
 			  }
 			  TxLen = an_send(sensor.percentage, TxBuffer);
 			  HAL_UART_Transmit_DMA(&huart3, TxBuffer, TxLen);
+			  tx_wait(&dma_info);
 		  }
 
 
@@ -249,14 +250,14 @@ int main(void)
 				case CALIBRATE:
 					TxLen = ack_send(CALIBRATE, TxBuffer);
 					HAL_UART_Transmit_DMA(&huart3, TxBuffer, TxLen);
-
-					HAL_Delay(10);
+					tx_wait(&dma_info);
 
 					sensor.calibrated = cal_sens(hadc1,&sensor);
 					if (sensor.calibrated == 0)					//Sensor was not calibrated
 					{
 						TxLen = er_send(ER_CAL,TxBuffer);
 						HAL_UART_Transmit_DMA(&huart3, TxBuffer, TxLen);
+						tx_wait(&dma_info);
 					}
 
 					break;
@@ -265,8 +266,7 @@ int main(void)
 				case SEND_VAL:
 					TxLen = ack_send(SEND_VAL, TxBuffer);
 					HAL_UART_Transmit_DMA(&huart3, TxBuffer, TxLen);
-
-					HAL_Delay(10);
+					tx_wait(&dma_info);
 
 					if (dma_info.data[4] == '1')
 					{
@@ -279,6 +279,7 @@ int main(void)
 						{
 							TxLen = er_send(ER_NOT_CAL,TxBuffer);
 							HAL_UART_Transmit_DMA(&huart3, TxBuffer, TxLen);
+							tx_wait(&dma_info);
 						}
 					}
 					else
@@ -291,8 +292,7 @@ int main(void)
 				default:
 					TxLen = er_send(ER_UN_MSG,TxBuffer);
 					HAL_UART_Transmit_DMA(&huart3, TxBuffer, TxLen);
-
-					HAL_Delay(10);
+					tx_wait(&dma_info);
 
 					break;
 			}
