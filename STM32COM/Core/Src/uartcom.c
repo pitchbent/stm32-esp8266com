@@ -113,3 +113,9 @@ uint8_t data_check(uint8_t *dat)
 
 
 }
+
+void tx_wait(DMA_STRUCT * dma)
+{
+	while(!dma->tx_flag);						//Wait for the tx flag to be set
+	dma->tx_flag=0;								//Reset it
+}

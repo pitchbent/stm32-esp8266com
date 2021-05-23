@@ -238,11 +238,11 @@ int main(void)
 				case STATUS:
 					TxLen = ack_send(STATUS, TxBuffer);
 					HAL_UART_Transmit_DMA(&huart3, TxBuffer, TxLen);
-
-					HAL_Delay(10);								//wait until we can transmit again
+					tx_wait(&dma_info);
 
 					TxLen = stat_send(TxBuffer);
 					HAL_UART_Transmit_DMA(&huart3, TxBuffer, TxLen);
+					tx_wait(&dma_info);
 					break;
 
 
@@ -691,7 +691,7 @@ void HAL_UART_TxHalfCpltCallback(UART_HandleTypeDef *huar)
 /*Callback when transmission was completed*/
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 {
-	dma_info.tx_flag = 0;
+	dma_info.tx_flag = 1;
 }
 
 

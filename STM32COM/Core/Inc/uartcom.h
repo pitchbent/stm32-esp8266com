@@ -32,6 +32,8 @@ uint8_t dat_send(uint8_t * txbuf); //send data
 /*Send an error code (#defines in main.h) and write the message into the tx buffer*/
 uint8_t er_send(uint8_t er_code,uint8_t * txbuf); //send error
 
+/*Wait for the UART TX to be free*/
+void tx_wait(DMA_STRUCT * dma);
 
 
 /*RX functions*/
