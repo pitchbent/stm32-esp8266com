@@ -18,13 +18,13 @@ PubSubClient client(espClient);
 
 const uint16_t ledPin = 12;
 
-const uint8_t numChars = 99;
-uint8_t receivedChars[numChars];   // an array to store the received Data
+//const uint8_t numChars = 99;
+uint8_t receivedChars[BUF_SIZE];   // an array to store the received Data
 bool newData = false;
-uint16_t timeout = 10000;
+//uint16_t timeout = 10000;
 uint16_t length_pub;
 
-uint8_t mqtt_in_data[numChars];
+uint8_t mqtt_in_data[BUF_SIZE];
 
 
 
@@ -90,7 +90,7 @@ void receive()
   static uint32_t tim;
   
   /*Check for timeout*/
-  if (InProg == true && (millis() - tim > timeout))
+  if (InProg == true && (millis() - tim > TIMEOUT))
   {
     count = 0;
     InProg = false;

@@ -15,7 +15,7 @@ uint8_t ack_send(uint8_t msg, uint8_t * txbuf)
 	txbuf[5] = (crc_value >> 8) & 0xFF;			//split crc value into 2x8bit
 	txbuf[6] = (crc_value >> 0) & 0xFF;
 
-	return 6;									//length
+	return 7;									//length
 
 
 }

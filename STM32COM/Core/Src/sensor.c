@@ -1,5 +1,20 @@
 #include <sensor.h>
+uint8_t val_sens(ADC_HandleTypeDef hadc, SENS_STRUCT * sens)
+{
+	uint8_t percentage;
 
+	sens->an_value = HAL_ADC_GetValue(&hadc);
+	if(sens->an_value-sens->wet_value > 0)										//check if the value is positive
+	{
+		percentage = 100-((sens->wet_value-sens->an_value)*100)/(sens->wet_value-sens->dry_value); // ((an_value-wet)*100) / (dry-wet)
+	}
+	else
+	{
+		percentage = 0;
+	}
+	return percentage;
+
+}
 
 
 uint8_t cal_sens(ADC_HandleTypeDef hadc, SENS_STRUCT * sens)
@@ -29,12 +44,13 @@ uint8_t cal_sens(ADC_HandleTypeDef hadc, SENS_STRUCT * sens)
 	HAL_ADC_Start_IT(&hadc);									//start the measuring
 	while(cal_counter<10)										//measure 10 times
 	{
-		if(adc_complete_flag == 1)
+		if(sens->adc_flag == 1)
 		{
 
 			cal_counter ++;
 			sens->an_value = hadc.Instance->DR;
 			dry += sens->an_value;
+			sens->adc_flag=0;
 			HAL_ADC_Start_IT(&hadc);
 		}
 	}
@@ -67,20 +83,22 @@ uint8_t cal_sens(ADC_HandleTypeDef hadc, SENS_STRUCT * sens)
 	HAL_ADC_Start_IT(&hadc);									//measure 10 times
 	while(cal_counter<10)
 	{
-		if(adc_complete_flag == 1)
+		if(sens->adc_flag == 1)
 		{
 
 			cal_counter ++;
 			sens->an_value = hadc.Instance->DR;
 			wet += sens->an_value;
+			sens->adc_flag=0;
 			HAL_ADC_Start_IT(&hadc);
 		}
 	}
 	wet = wet / 10;												//average value
 	sens->wet_value = wet;
 
-	adc_complete_flag = 0;
-	HAL_ADC_Stop_IT(&hadc);
+	HAL_ADC_Stop_IT(&hadc);									//stop adc
+	sens->adc_flag = 0;										//sanity check
+
 
 	if((dry-wet)>0)											//check if the values are reasonable
 	{

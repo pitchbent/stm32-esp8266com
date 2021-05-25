@@ -187,20 +187,28 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  if(adc_complete_flag == 1)
+	  if(sensor.adc_flag == 1)
 	  {
 		  if (sensor.calibrated == 1)
 		  {
-			  sensor.an_value = HAL_ADC_GetValue(&hadc1);
-			  if(sensor.an_value-sensor.wet_value > 0)										//check if the value is positive
-			  {
-				  sensor.percentage = 100-((sensor.wet_value-sensor.an_value)*100)/(sensor.wet_value-sensor.dry_value); // ((an_value-wet)*100) / (dry-wet)
-			  }
-			  else
-			  {
-				  sensor.percentage = 0;
-			  }
+			  sensor.percentage = val_sens(hadc1, &sensor);	//read sensor and convert to %
+			  sensor.adc_flag = 0;
+			  //sensor.an_value = HAL_ADC_GetValue(&hadc1);
+			  //if(sensor.an_value-sensor.wet_value > 0)										//check if the value is positive
+			  //{
+			  //sensor.percentage = 100-((sensor.wet_value-sensor.an_value)*100)/(sensor.wet_value-sensor.dry_value); // ((an_value-wet)*100) / (dry-wet)
+			  //}
+			  //else
+			  //{
+			  //sensor.percentage = 0;
+			  //}
 			  TxLen = an_send(sensor.percentage, TxBuffer);
+			  HAL_UART_Transmit_DMA(&huart3, TxBuffer, TxLen);
+			  tx_wait(&dma_info);
+		  }
+		  else
+		  {
+			  TxLen = er_send(ER_CAL,TxBuffer);
 			  HAL_UART_Transmit_DMA(&huart3, TxBuffer, TxLen);
 			  tx_wait(&dma_info);
 		  }
@@ -611,7 +619,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 {
 	//HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
 	HAL_ADC_Stop_IT(&hadc1);
-	adc_complete_flag = 1;
+	sensor.adc_flag = 1;
 }
 
 

@@ -24,6 +24,7 @@ extern volatile uint8_t timer2_f;
  *Returns 1 if calibration was succesfull, 0 if not. Value is stored in sens.coeff*/
 
 uint8_t cal_sens(ADC_HandleTypeDef hadc, SENS_STRUCT * sens);
+uint8_t val_sens(ADC_HandleTypeDef hadc, SENS_STRUCT * sens);
 
 
 #ifdef __cplusplus

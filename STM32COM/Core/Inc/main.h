@@ -61,10 +61,10 @@ extern "C" {
 #define ERROR 'E'
 #define ACK 'K'
 /*Error Bytes*/
-#define ER_UNSPEC '0'	//unspecified error
-#define ER_CAL '1'		//calibration error
-#define ER_NOT_CAL '2'	//sensor not calibrated
-#define ER_UN_MSG '3'	//unknown control message
+#define ER_UNSPEC '1'	//unspecified error
+#define ER_CAL '2'		//calibration error
+#define ER_NOT_CAL '3'	//sensor not calibrated
+#define ER_UN_MSG '4'	//unknown control message
 
 /* USER CODE END EC */
 
@@ -107,6 +107,8 @@ typedef struct
 	volatile uint8_t timer_f;	// Flag for measuring timer
 	uint16_t an_value;			// measured humidity
 	uint8_t percentage;			// humidity in percent
+	volatile uint8_t adc_flag;	// Flag for ADC complete
+	uint8_t send_flag;			// Flag for continuous sending of values
 
 } SENS_STRUCT;
 /* USER CODE END Private defines */
