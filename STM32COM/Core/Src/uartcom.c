@@ -71,7 +71,7 @@ uint8_t an_send(uint16_t value,uint8_t * txbuf)
 	txbuf[len+3] = (crc_value >> 8) & 0xFF;			//split crc value into 2x8bit
 	txbuf[len+4] = (crc_value >> 0) & 0xFF;
 
-	return len+4;									//return length
+	return len+5;									//return length
 }
 
 uint8_t stat_send(uint8_t * txbuf)
@@ -80,7 +80,7 @@ uint8_t stat_send(uint8_t * txbuf)
 
 	txbuf[0] = START;
 	txbuf[1] = 0 + OFF_ASCII;
-	txbuf[2] = 1 + OFF_ASCII;
+	txbuf[2] = 3 + OFF_ASCII;
 	txbuf[3] = BOARD;
 	txbuf[4] = VERSION;
 	txbuf[5] = SENSOR;

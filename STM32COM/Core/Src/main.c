@@ -189,7 +189,7 @@ int main(void)
     /* USER CODE BEGIN 3 */
 	  if(sensor.adc_flag == 1)
 	  {
-		  if (sensor.calibrated == 1)
+		  if (sensor.cal_flag == 1)
 		  {
 			  sensor.percentage = val_sens(hadc1, &sensor);	//read sensor and convert to %
 			  sensor.adc_flag = 0;
@@ -260,8 +260,8 @@ int main(void)
 					HAL_UART_Transmit_DMA(&huart3, TxBuffer, TxLen);
 					tx_wait(&dma_info);
 
-					sensor.calibrated = cal_sens(hadc1,&sensor);
-					if (sensor.calibrated == 0)					//Sensor was not calibrated
+					sensor.cal_flag = cal_sens(hadc1,&sensor);
+					if (sensor.cal_flag == 0)					//Sensor was not calibrated
 					{
 						TxLen = er_send(ER_CAL,TxBuffer);
 						HAL_UART_Transmit_DMA(&huart3, TxBuffer, TxLen);
@@ -278,7 +278,7 @@ int main(void)
 
 					if (dma_info.data[4] == '1')
 					{
-						if(sensor.calibrated == 1)
+						if(sensor.cal_flag == 1)
 						{
 							//enable timer for adc
 							HAL_TIM_Base_Start_IT(&htim1);
@@ -609,7 +609,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	{
 		//HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
 		HAL_TIM_Base_Stop_IT(&htim2);
-		timer2_f = 1;
+		sensor.timer_flag= 1;
 	}
 }
 

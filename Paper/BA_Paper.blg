@@ -2,6 +2,7 @@ This is BibTeX, Version 0.99d (TeX Live 2020/Arch Linux)
 Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: BA_Paper.aux
 A level-1 auxiliary file: Content//0-Deckblatt.aux
+A level-1 auxiliary file: Content/0-Vorwort.aux
 A level-1 auxiliary file: Content/0-Selbststaendigkeit.aux
 A level-1 auxiliary file: Content/0-Zusammenfassung.aux
 A level-1 auxiliary file: Content/0-Abkuerzungsverzeichnis.aux
@@ -12,49 +13,51 @@ Warning--empty year in STM32_Datasheet
 Warning--empty year in STM32_Ref
 Warning--empty year in ImgParitaet
 Warning--empty year in ImgRXTX
+Warning--empty year in MQTT_FAQ
 Warning--empty year in ImgBuffer
 Warning--empty year in HAL_Description
 Warning--empty year in CubeMX
 Warning--empty year in ArduinoRef
-You've used 14 entries,
+Warning--empty year in Sensor
+You've used 17 entries,
             2481 wiz_defined-function locations,
-            630 strings with 6411 characters,
-and the built_in function-call counts, 3703 in all, are:
-= -- 309
-> -- 98
-< -- 14
-+ -- 59
-- -- 28
-* -- 164
-:= -- 571
-add.period$ -- 49
-call.type$ -- 14
-change.case$ -- 25
-chr.to.int$ -- 11
-cite$ -- 23
-duplicate$ -- 211
-empty$ -- 421
-format.name$ -- 42
-if$ -- 803
+            648 strings with 6767 characters,
+and the built_in function-call counts, 4491 in all, are:
+= -- 377
+> -- 119
+< -- 17
++ -- 71
+- -- 34
+* -- 197
+:= -- 694
+add.period$ -- 60
+call.type$ -- 17
+change.case$ -- 31
+chr.to.int$ -- 14
+cite$ -- 28
+duplicate$ -- 257
+empty$ -- 509
+format.name$ -- 51
+if$ -- 974
 int.to.chr$ -- 4
-int.to.str$ -- 15
-missing$ -- 6
-newline$ -- 85
-num.names$ -- 42
-pop$ -- 193
+int.to.str$ -- 18
+missing$ -- 7
+newline$ -- 102
+num.names$ -- 51
+pop$ -- 232
 preamble$ -- 1
-purify$ -- 14
+purify$ -- 17
 quote$ -- 0
-skip$ -- 131
+skip$ -- 160
 stack$ -- 0
-substring$ -- 28
-swap$ -- 32
+substring$ -- 34
+swap$ -- 38
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 89
-warning$ -- 9
-while$ -- 28
+type$ -- 110
+warning$ -- 11
+while$ -- 34
 width$ -- 0
-write$ -- 184
-(There were 9 warnings)
+write$ -- 222
+(There were 11 warnings)

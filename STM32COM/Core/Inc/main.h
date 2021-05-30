@@ -100,11 +100,10 @@ typedef struct
 
 typedef struct
 {
-	uint8_t calibrated;			// Flag if its calibrated
-	double coeff; 				// Coefficient which needs to be calculated for conversion value -> percentage
+	uint8_t cal_flag;			// Flag if its calibrated
 	uint16_t dry_value;			// Value of the dry sensor, needed for calculation of the percentage
 	uint16_t wet_value;			// Value of the wet sensor, "
-	volatile uint8_t timer_f;	// Flag for measuring timer
+	volatile uint8_t timer_flag;	// Flag for measuring timer
 	uint16_t an_value;			// measured humidity
 	uint8_t percentage;			// humidity in percent
 	volatile uint8_t adc_flag;	// Flag for ADC complete

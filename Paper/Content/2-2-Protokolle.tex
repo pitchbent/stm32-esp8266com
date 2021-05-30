@@ -113,3 +113,41 @@ Die Bitfolge '01001111' entspricht dem Buchstaben 'O', die Bitfolge '01001011' d
 
 
 \subsubsection{MQTT} 
+
+MQTT ist ein simples Client-Server-Protokoll zur Nachrichtenübertragung, häufig genutzt in \ac{IoT}-Anwendungen oder im industriellen Umfeld. Durch
+die geringe Belegung von Bandbreite eignet es sich in Netzwerken mit hoher Latenz, schlechten Verbindungen und zur Nutzung auf Geräten
+mit vergleichsweise geringer Rechenleistung \citep{MQTT_FAQ}.
+
+\smallskip
+
+Geräte, welche Daten empfangen oder versenden (s.g. Clients) sind mit einem zentralem Server (s.g. Broker) verbunden. Nach erfolgreicher Verbindung
+der Clients mit dem Broker versenden diese ihre Nachrichten mit einem s.g. Topic, welches die versendete Nachricht hierarchisch einstuft.
+Ein Beispiel wäre zum Beispiel \lstinline!Hochschule/B/Temp!. Sendet nun ein Client eine Nachricht mit diesem Topic, wird 
+diese Nachricht an alle Clients weitergeleitet, welche dieses Topic abonniert haben. Diese Art der Kommunikation wird Publish/Subscribe-Modell 
+genannt \citep{MQTT_Article} und wird in Abb. \ref{img:MQTT} dargestellt. 
+
+\begin{figure}[h]
+    \vspace{-\baselineskip}
+        \centering
+        \includegraphics[scale=0.5]{Pictures/brokerclient.png}
+        \caption{\textit{Publish/Subscribe-Modell}}
+        \label{img:MQTT}
+\end{figure}
+
+\smallskip
+
+MQTT besitzt diverse Features, welche, abgesehen von der Simplizität, attraktiv für den Einsatz im industriellen Umfeld sind \citep{MQTT_Article}:
+
+\paragraph{Quality of Service Level}
+Durch den Quality of Service Level kann sichergestellt werden, dass eine Nachricht beim Empfänger ankommt, auch wenn es zu Verbindungsabbrüchen kommt.
+\paragraph{Retained Messages}
+Die letzte gesendete Nachricht eines Topics wird im Broker hinterlegt. Verbindet sich ein neuer Client mit diesem Topic, erhält er automatisch
+die gespeicherte Nachricht.
+\paragraph{Last Will and Testament}
+Sobald der Broker feststellt, dass ein Client die Verbindung ohne eine Abmeldung verloren hat, wird eine Nachricht an alle Clients, welche das
+selbe Topic abonniert haben, versendet.
+\paragraph{Persistent Sessions}
+Falls mit häufigen Verbindungsabbrüchen zu rechnen ist, kann der Broker alle durch einen Verbindungsabbruch verpasste Nachrichten automatisch 
+erneut an den Client versenden.
+
+

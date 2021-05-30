@@ -19,7 +19,6 @@ extern volatile uint8_t timer2_f;
  *LED off: 	measuring 10 cycles
  *LED on: 	sensor needs to be soaked
  *LED off:	measuring 10 cycles
- *LED on:	measuring done
  *
  *Returns 1 if calibration was succesfull, 0 if not. Value is stored in sens.coeff*/
 

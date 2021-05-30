@@ -283,7 +283,48 @@ Dieser zusammenhang wird in folgender Funktion umgesetzt:
 Es wird die DMA-Strukturvariable übergeben und gewartet, bis das Flag in der Interruptroutine gesetzt wurde. Sobald dies geschehen ist, wird es rückgesetzt - neue
 Daten können versendet werden.
 
+\subsubsection{STM32: Erstellen von Telegrammen}
 
+Es werden verschiedene Telegramme, abhängig von der Nachricht, versendet. Die Telegramme enthalten neben der eigentlichen Nachricht auch immer eine CRC-Prüfsumme,
+Längeninformationen und ein Startzeichen (siehe \ref{subsub: Datenformat}). Um dies zu ermöglichen, wurden diverse Funktionen erstellt. Dieser Sachverhalt soll
+an Hand einer Funktion, welche die Antwort auf den Befehl STATUS erstellt, dargestellt werden. Andere Funktionen, welche z.B. die Messwerte des Sensors versenden,
+sind sehr ähnlich aufgebaut und unterscheiden sich nur durch den eigentlichen Nachrichteninhalt.
+
+\smallskip
+
+Allen Funktionen wird ein Zeiger auf ein Array übergeben, in welches die Daten geschrieben werden sollen. Zudem geben die Funktionen die Länge des Telegramms zurück.
+
+\smallskip
+
+Die Funktion \lstinline!uint8_t stat_send(uint8_t * txbuf)! schreibt Informationen über den Softwarestand, den genutzten Sensor und die Boardversion in das Array. Diese
+Daten sind durch die Defines \lstinline!BOARD!,\lstinline!VERSION! und \lstinline!SENSOR! festgelegt.
+
+\begin{lstlisting}[caption={\textit{Status-Telegramm}}]
+  uint8_t stat_send(uint8_t * txbuf)
+  {
+    uint16_t crc_value;
+    
+    txbuf[0] = START; 
+    txbuf[1] = 0 + OFF_ASCII;
+    txbuf[2] = 3 + OFF_ASCII;
+    txbuf[3] = BOARD;
+    txbuf[4] = VERSION;
+    txbuf[5] = SENSOR;
+    crc_value = CRC16_buf(txbuf,6);
+    txbuf[6] = (crc_value >> 8) & 0xFF;				
+    txbuf[7] = (crc_value >> 0) & 0xFF;
+  
+    return 8;										
+  }
+\end{lstlisting}
+
+Die Längeninformation wird als \ac{ASCII}-Zahl dargestellt, muss deshalb um den entsprechenden Offset verschoben werden. Da die CRC16-Prüfsumme 16 Bit lang ist,
+muss diese in zwei 8 Bit lange Teile aufgeteilt werden. Dies geschieht durch entsprechendes Verschieben nach rechts und der logischen UND-Operation mit der Zahl 
+0xFF.
+
+\smallskip
+
+Da das gesamte Telegramm acht Zeichen lang ist, wird eine acht zurückgegeben.
 
 
 \subsubsection{ESP8266: Empfang und Überprüfung der Daten}
