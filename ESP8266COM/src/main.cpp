@@ -22,7 +22,7 @@ const uint16_t ledPin = 12;
 uint8_t receivedChars[BUF_SIZE];   // an array to store the received Data
 bool newData = false;
 //uint16_t timeout = 10000;
-uint16_t length_pub;
+uint16_t length_pub;               // length of the mqtt msg
 
 uint8_t mqtt_in_data[BUF_SIZE];
 
@@ -49,7 +49,7 @@ void setup() {
     Serial.begin(BAUD);
     Serial.println("ready");
 
-    //setup_wifi();
+    setup_wifi();
     client.setServer(mqtt_server,1883);
     client.setCallback(callback);
 
@@ -60,22 +60,21 @@ void setup() {
 void loop() {
 
     receive();
-    // if (!client.connected()) {
-    // reconnect();
-    // }
-    // if(!client.loop())
-    // client.connect("ESP8266Client");
+    if (!client.connected()) {
+      reconnect();
+    }
+    if(!client.loop())
+      client.connect("ESP8266Client");
     if (newData == true)
     {
     Serial.println("pub mq");
     for (uint8_t i = 0; i <= 6; i++)
     {
-      Serial.print(receivedChars[i],HEX);
+      Serial.print(receivedChars[i]);
     }
     
-    // client.publish("testTopic",receivedChars+3,length_pub);
-    // client.publish("testTopic","test");
-   
+    client.publish("Humid",receivedChars+3,length_pub);   //offset by three to skip the start and length bytes
+       
     newData = false;
     }
 }
@@ -156,6 +155,7 @@ void receive()
   
 // Don't change the function below. This functions connects your ESP8266 to your router
 void setup_wifi() {
+  bool led_flag = 0;
 
   delay(10);
   Serial.println();
@@ -164,8 +164,19 @@ void setup_wifi() {
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
+    if (led_flag==0)
+    {
+      digitalWrite(ledPin,HIGH);
+      led_flag = 1;
+    }
+    else
+    {
+      digitalWrite(ledPin,LOW);
+      led_flag = 0;
+    }
     Serial.print(".");
   }
+  digitalWrite(ledPin,LOW);
   Serial.println("");
   Serial.print("WiFi connected - ESP IP address: ");
   Serial.println(WiFi.localIP());
@@ -176,28 +187,29 @@ void callback(String topic, byte* message, unsigned int length) {
   char len_buf[2];
   uint16_t crc16;
  
-  Serial.print("Message arrived on topic: ");
-  Serial.print(topic);
-  Serial.print(". Message: ");
+  // Serial.print("Message arrived on topic: ");
+  // Serial.print(topic);
+  // Serial.print(". Message: ");
+  
   
   sprintf(len_buf,"%d",length); //turn int to char array
 
-  Serial.println("len_buf items:");
-  Serial.println(len_buf[0]);
-  Serial.println(len_buf[1]);
+  // Serial.println("len_buf items:");
+  // Serial.println(len_buf[0]);
+  // Serial.println(len_buf[1]);
 
 
   mqtt_in_data[0]=START_MARKER; 
 
   if (length <10)
   {
-    Serial.println("length under 10");
+    // Serial.println("length under 10");
     mqtt_in_data[1] = '0';
     mqtt_in_data[2] = len_buf[0];
   }
   else
   {
-    Serial.println("length over 10");
+    // Serial.println("length over 10");
     mqtt_in_data[1] = len_buf[0];
     mqtt_in_data[2] = len_buf[1];
   }
@@ -220,7 +232,7 @@ void callback(String topic, byte* message, unsigned int length) {
 
   for (uint8_t c = 0; c <= (length+4); c++)
   {
-    Serial.print(mqtt_in_data[c],HEX);
+    Serial.print((char)mqtt_in_data[c]);        //cast to char so ASCII gets put out
   }
   
   
@@ -244,14 +256,16 @@ void reconnect() {
     if (client.connect(clientId.c_str())) {
       Serial.println("connected");
       // Once connected, publish an announcement...
-      client.publish("outTopic", "hello world");
+      client.publish("Humid", "Sensor connected!");
       // ... and resubscribe
-      client.subscribe("testTopic");
+      client.subscribe("SensorSetup");
+      digitalWrite(ledPin,LOW);
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
       Serial.println(" try again in 5 seconds");
       // Wait 5 seconds before retrying
+      digitalWrite(ledPin,HIGH);
       delay(5000);
     }
   }
