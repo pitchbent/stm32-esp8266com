@@ -1,7 +1,6 @@
 \subsection{Protokolle}
 \subsubsection{UART}
-\paragraph{Grundlagen}
-\subparagraph{Parität}
+Eine wichtige Grundlage ist die Parität.
 Das Paritätsbit dient als Ergänzung einer Folge von Bits. Durch das Ergänzen und das entsprechende Setzen des Bits, wird sichergestellt,
 dass die Anzahl der Bits gerade ist.
 
@@ -21,16 +20,17 @@ dass die Anzahl der Bits gerade ist.
 Die Nutzung eines Paritätsbits ist die einfachste aller Möglichkeiten, Übertragungsfehler zu erkennen. Kippt während der Übertragung eines
 der zu übertragenen Bits, ist die Zahl der Bits nicht mehr gerade - ein Fehler liegt vor.
 
-Es ist allerdings nicht möglich festzustellen, wo genau der Fehler aufgetreten ist \citep{Bussysteme}.
+Es ist allerdings nicht möglich, festzustellen, wo genau der Fehler aufgetreten ist \citep{Bussysteme}.
 
 \smallskip
 
 Abb. \ref{img:paritaet} zeigt die Applikation eines Paritätsbits bei der binären Repräsentation der Dezimalzahlen eins bis acht. Sobald die Anzahl der 
 gesetzten Bits ungerade ist, wird ein Paritätsbit (E) hinzugefügt.
 
-\subparagraph{Baudrate}\label{para:baud}
+\smallskip
 
-Die Baudrate, auch Symbolrate genannt, beschreibt die Geschwindigkeit mit der Zeichen übertragen werden.
+Eine weitere Grundlage stellt die Baudrate dar.
+Die Baudrate, auch Symbolrate genannt, beschreibt die Geschwindigkeit, mit der Zeichen übertragen werden.
 
 Ein Baud entspricht hierbei ein Zeichen pro Sekunde \citep{Bussysteme}.
 
@@ -46,12 +46,11 @@ Diese Baudraten werden von den meisten Computer- oder Prozessorsystemen unterst�
 
 \newpage
 
-\paragraph{Erklärung}
 
-Der \acl{UART} ist eine elektronische Schaltung, oder im Falle eines \ac{uC}, eine Peripherieeinheit, welche
+Auf Basis dieser Grundlagen bildet der \acl{UART} eine elektronische Schaltung, oder im Falle eines \ac{uC}, eine Peripherieeinheit, welche
 die Datenübertragung mit einem anderen System ermöglicht. Die Übertragung läuft hierbei asynchron,
 d.h. ohne ein Taktsignal, welches ebenfalls übertragen wird, ab \citep{Bussysteme}. Die Übertragungsgeschwindigkeit
-wird in Baud  \ref{para:baud} angegeben.
+wird in Baud angegeben.
 
 \smallskip
 
@@ -66,22 +65,22 @@ wird in Baud  \ref{para:baud} angegeben.
  \end{wrapfigure}
 
 
-Jede Seite der Übertragung verfügt über zwei Anschlüsse, \textbf{RX} und \textbf{TX}. \textbf{RX} steht hierbei
-für Receiver (\textit{engl. Empfänger}), währen \textbf{TX} für Transmitter (\textit{engl. Sender}) steht.
+Jede Seite der Übertragung verfügt über zwei Anschlüsse, \textbf{RX} und \textbf{TX}. \textbf{RX} steht hier
+für Receiver (\textit{deutsch Empfänger}), während \textbf{TX} für Transmitter (\textit{deutsch Sender}) steht.
 
-Für eine korrekte Funktion müssen die beiden Anschlüsse "über Kreuz", wie in Abb. \ref{img:uart_rxtx} dargestellt, verbunden werden \citep{Mikroprozessortechnik}.
+Für eine korrekte Funktion müssen die beiden Anschlüsse über Kreuz, wie in Abb. \ref{img:uart_rxtx} dargestellt, verbunden werden \citep{Mikroprozessortechnik}.
 
 \smallskip
 
 Es existieren verschiedene Implementationen von \ac{UART}, welche sich in der Nachrichtenlänge und der Art der
-Parität unterscheiden (gerade oder ungerade Parität). Ein oft genutztes Format ist das s.g. \textbf{8N1}-Format.
+Parität unterscheiden (gerade oder ungerade Parität). Ein oft genutztes Format ist das \textbf{8N1}-Format.
 
 \smallskip
 
 
 Die Abkürzung steht hierbei für 8 Bits Nachrichtenlänge und \textit{keine} Parität und ein Stop-Bit. Es wird jedoch neben dem \textit{Stop-}Bit
-immer noch ein weiteres Bit übertragen, das \textit{Start-}Bit. Diese zwei Bits repräsentieren das s.g. Framing \textit{engl.: Einrahmen} 
-(siehe Abb. \ref{img:uart_framing}) und signalisieren den Beginn und das Ende der Nachricht. Der Beginn einer Nachricht wird mit einem 
+immer noch ein weiteres Bit übertragen, das \textit{Start-}Bit. Diese zwei Bits repräsentieren das Framing (\textit{deutsch Einrahmen}
+, siehe Abb. \ref{img:uart_framing}) und signalisieren den Beginn und das Ende der Nachricht. Der Beginn einer Nachricht wird mit einem 
 Wechsel von '1' auf '0' signalisiert, während das Ende einer Nachricht mit einem Wechsel von '0' auf '1' signalisiert wird \citep{Mikroprozessortechnik}. 
 
 \vspace{0.5cm}
@@ -113,18 +112,19 @@ Die Bitfolge '01001111' entspricht dem Buchstaben 'O', die Bitfolge '01001011' d
 
 
 \subsubsection{MQTT} 
+\label{subsub: MQTT}
 
 MQTT ist ein simples Client-Server-Protokoll zur Nachrichtenübertragung, häufig genutzt in \ac{IoT}-Anwendungen oder im industriellen Umfeld. Durch
-die geringe Belegung von Bandbreite eignet es sich in Netzwerken mit hoher Latenz, schlechten Verbindungen und zur Nutzung auf Geräten
+die geringe Belegung von Bandbreite eignet es sich in Netzwerken mit hoher Latenz, bei schlechten Verbindungen und zur Nutzung auf Geräten
 mit vergleichsweise geringer Rechenleistung \citep{MQTT_FAQ}.
 
 \smallskip
 
-Geräte, welche Daten empfangen oder versenden (s.g. Clients) sind mit einem zentralem Server (s.g. Broker) verbunden. Nach erfolgreicher Verbindung
-der Clients mit dem Broker versenden diese ihre Nachrichten mit einem s.g. Topic, welches die versendete Nachricht hierarchisch einstuft.
+Geräte, welche Daten empfangen oder versenden (s.g. Clients), sind mit einem zentralen Server (s.g. Broker) verbunden. Nach erfolgreicher Verbindung
+der Clients mit dem Broker versenden diese ihre Nachrichten mit einem Topic, welches die versendete Nachricht hierarchisch einstuft.
 Ein Beispiel wäre zum Beispiel \lstinline!Hochschule/B/Temp!. Sendet nun ein Client eine Nachricht mit diesem Topic, wird 
 diese Nachricht an alle Clients weitergeleitet, welche dieses Topic abonniert haben. Diese Art der Kommunikation wird Publish/Subscribe-Modell 
-genannt \citep{MQTT_Article} und wird in Abb. \ref{img:MQTT} dargestellt. 
+genannt \citep{MQTT_Article} und in Abb. \ref{img:MQTT} dargestellt. 
 
 \begin{figure}[h]
     \vspace{-\baselineskip}
@@ -138,16 +138,14 @@ genannt \citep{MQTT_Article} und wird in Abb. \ref{img:MQTT} dargestellt.
 
 MQTT besitzt diverse Features, welche, abgesehen von der Simplizität, attraktiv für den Einsatz im industriellen Umfeld sind \citep{MQTT_Article}:
 
-\paragraph{Quality of Service Level}
-Durch den Quality of Service Level kann sichergestellt werden, dass eine Nachricht beim Empfänger ankommt, auch wenn es zu Verbindungsabbrüchen kommt.
-\paragraph{Retained Messages}
-Die letzte gesendete Nachricht eines Topics wird im Broker hinterlegt. Verbindet sich ein neuer Client mit diesem Topic, erhält er automatisch
-die gespeicherte Nachricht.
-\paragraph{Last Will and Testament}
-Sobald der Broker feststellt, dass ein Client die Verbindung ohne eine Abmeldung verloren hat, wird eine Nachricht an alle Clients, welche das
-selbe Topic abonniert haben, versendet.
-\paragraph{Persistent Sessions}
-Falls mit häufigen Verbindungsabbrüchen zu rechnen ist, kann der Broker alle durch einen Verbindungsabbruch verpasste Nachrichten automatisch 
-erneut an den Client versenden.
+\begin{itemize}
+    \item Durch den \textbf{Quality of Service Level} kann sichergestellt werden, dass eine Nachricht beim Empfänger ankommt, auch wenn es zu Verbindungsabbrüchen kommt.
+    \item Die letzte gesendete Nachricht eines Topics wird im Broker hinterlegt. Verbindet sich ein neuer Client mit diesem Topic, erhält er automatisch
+    die gespeicherte Nachricht (\textbf{Retained Messages}).
+    \item Sobald der Broker feststellt, dass ein Client die Verbindung ohne eine Abmeldung verloren hat, wird eine Nachricht an alle Clients, welche das
+    selbe Topic abonniert haben, versendet (\textbf{Last Will and Testament}).
+    \item Falls mit häufigen Verbindungsabbrüchen zu rechnen ist, kann der Broker alle durch einen Verbindungsabbruch verpasste Nachrichten automatisch 
+    erneut an den Client versenden (\textbf{Persistent Sessions}).
+\end{itemize}
 
 

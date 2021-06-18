@@ -245,6 +245,7 @@ int main(void)
 
 
 				case STATUS:
+					HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
 					TxLen = ack_send(STATUS, TxBuffer);
 					HAL_UART_Transmit_DMA(&huart3, TxBuffer, TxLen);
 					tx_wait(&dma_info);

@@ -5,59 +5,53 @@
 \contentsline {section}{\numberline {1}Einführung}{9}{section.1}%
 \contentsline {subsection}{\numberline {1.1}Vorhergegangene Arbeit}{9}{subsection.1.1}%
 \contentsline {subsection}{\numberline {1.2}Aufbau der Arbeit}{9}{subsection.1.2}%
-\contentsline {section}{\numberline {2}Grundlagen}{11}{section.2}%
-\contentsline {subsection}{\numberline {2.1}Microcontroller}{11}{subsection.2.1}%
-\contentsline {subsubsection}{\numberline {2.1.1}ESP8266}{11}{subsubsection.2.1.1}%
-\contentsline {subsubsection}{\numberline {2.1.2}STM32F103}{11}{subsubsection.2.1.2}%
-\contentsline {subsection}{\numberline {2.2}Peripherie}{12}{subsection.2.2}%
-\contentsline {subsubsection}{\numberline {2.2.1}UART/USART}{12}{subsubsection.2.2.1}%
-\contentsline {subsubsection}{\numberline {2.2.2}DMA}{12}{subsubsection.2.2.2}%
-\contentsline {subsubsection}{\numberline {2.2.3}ADC}{13}{subsubsection.2.2.3}%
-\contentsline {subsubsection}{\numberline {2.2.4}GPIO}{14}{subsubsection.2.2.4}%
-\contentsline {subsubsection}{\numberline {2.2.5}Timer}{15}{subsubsection.2.2.5}%
-\contentsline {subsection}{\numberline {2.3}Protokolle}{16}{subsection.2.3}%
-\contentsline {subsubsection}{\numberline {2.3.1}UART}{16}{subsubsection.2.3.1}%
-\contentsline {paragraph}{\nonumberline Grundlagen}{16}{paragraph*.23}%
-\contentsline {subparagraph}{\nonumberline Parität}{16}{subparagraph*.25}%
-\contentsline {subparagraph}{\nonumberline Baudrate}{16}{subparagraph*.28}%
-\contentsline {paragraph}{\nonumberline Erklärung}{17}{paragraph*.30}%
-\contentsline {subsubsection}{\numberline {2.3.2}MQTT}{18}{subsubsection.2.3.2}%
-\contentsline {paragraph}{\nonumberline Quality of Service Level}{18}{paragraph*.37}%
-\contentsline {paragraph}{\nonumberline Retained Messages}{18}{paragraph*.39}%
-\contentsline {paragraph}{\nonumberline Last Will and Testament}{18}{paragraph*.41}%
-\contentsline {paragraph}{\nonumberline Persistent Sessions}{19}{paragraph*.43}%
-\contentsline {subsection}{\numberline {2.4}Datenstrukturen und Algorithmen}{20}{subsection.2.4}%
-\contentsline {subsubsection}{\numberline {2.4.1}Ringbuffer}{20}{subsubsection.2.4.1}%
-\contentsline {subsubsection}{\numberline {2.4.2}Zyklische Redundanzprüfung}{20}{subsubsection.2.4.2}%
-\contentsline {subsection}{\numberline {2.5}STM32 Hardware Abstraction Layer und CubeMX}{20}{subsection.2.5}%
-\contentsline {section}{\numberline {3}Umsetzung}{22}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Protokoll}{22}{subsection.3.1}%
-\contentsline {subsubsection}{\numberline {3.1.1}CRC16-CCITT}{22}{subsubsection.3.1.1}%
-\contentsline {subsubsection}{\numberline {3.1.2}Datenformat}{24}{subsubsection.3.1.2}%
-\contentsline {subsubsection}{\numberline {3.1.3}Nachrichtentypen}{24}{subsubsection.3.1.3}%
-\contentsline {subsection}{\numberline {3.2}Übertragung von Daten}{26}{subsection.3.2}%
-\contentsline {subsubsection}{\numberline {3.2.1}STM32: Strukturvariable DMA\_STRUCT}{26}{subsubsection.3.2.1}%
-\contentsline {subsubsection}{\numberline {3.2.2}STM32: Konfiguration des UART}{26}{subsubsection.3.2.2}%
-\contentsline {subsubsection}{\numberline {3.2.3}STM32: Idle Line Detection}{27}{subsubsection.3.2.3}%
-\contentsline {subsubsection}{\numberline {3.2.4}STM32: Empfangsinterrupt / DMA Circular Buffer}{28}{subsubsection.3.2.4}%
-\contentsline {subsubsection}{\numberline {3.2.5}STM32: Überprüfen der Daten}{30}{subsubsection.3.2.5}%
-\contentsline {subsubsection}{\numberline {3.2.6}STM32: Versenden von Daten}{31}{subsubsection.3.2.6}%
-\contentsline {subsubsection}{\numberline {3.2.7}STM32: Erstellen von Telegrammen}{31}{subsubsection.3.2.7}%
-\contentsline {subsubsection}{\numberline {3.2.8}ESP8266: Empfang und Überprüfung der Daten}{32}{subsubsection.3.2.8}%
-\contentsline {subsection}{\numberline {3.3}Erfassung und Verarbeitung von Messwerten}{36}{subsection.3.3}%
-\contentsline {subsubsection}{\numberline {3.3.1}Kapazitive Feuchtigkeitsmessung}{36}{subsubsection.3.3.1}%
-\contentsline {subsubsection}{\numberline {3.3.2}Analog-Digital Converter}{36}{subsubsection.3.3.2}%
-\contentsline {subsubsection}{\numberline {3.3.3}Strukturvariable SENS\_STRUCT}{37}{subsubsection.3.3.3}%
-\contentsline {subsubsection}{\numberline {3.3.4}Kalibrierung des Sensors}{37}{subsubsection.3.3.4}%
-\contentsline {subsubsection}{\numberline {3.3.5}Berechnung des Messwertes}{39}{subsubsection.3.3.5}%
-\contentsline {subsection}{\numberline {3.4}Zusammenarbeit der Soft- und Hardwarekomponenten}{41}{subsection.3.4}%
-\contentsline {section}{\numberline {4}Auswertung}{42}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Bewertung und Fazit}{42}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Fehler}{42}{subsection.4.2}%
-\contentsline {paragraph}{\nonumberline Nachrichtenformat}{42}{paragraph*.57}%
-\contentsline {paragraph}{\nonumberline Zyklische Redundanzprüfung}{42}{paragraph*.59}%
-\contentsline {subsection}{\numberline {4.3}Ausblick}{42}{subsection.4.3}%
-\contentsline {section}{\nonumberline Abbildungsverzeichnis}{43}{section*.60}%
-\contentsline {section}{\nonumberline Listings}{44}{section*.61}%
-\contentsline {section}{\nonumberline Quellenverzeichnis}{45}{section*.63}%
+\contentsline {section}{\numberline {2}Grundlagen}{10}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Microcontroller}{10}{subsection.2.1}%
+\contentsline {subsubsection}{\numberline {2.1.1}ESP8266}{10}{subsubsection.2.1.1}%
+\contentsline {subsubsection}{\numberline {2.1.2}STM32F103}{10}{subsubsection.2.1.2}%
+\contentsline {subsection}{\numberline {2.2}Peripherie}{11}{subsection.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.1}UART/USART}{11}{subsubsection.2.2.1}%
+\contentsline {subsubsection}{\numberline {2.2.2}DMA}{11}{subsubsection.2.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.3}ADC}{12}{subsubsection.2.2.3}%
+\contentsline {subsubsection}{\numberline {2.2.4}GPIO}{13}{subsubsection.2.2.4}%
+\contentsline {subsubsection}{\numberline {2.2.5}Timer}{14}{subsubsection.2.2.5}%
+\contentsline {subsection}{\numberline {2.3}Protokolle}{15}{subsection.2.3}%
+\contentsline {subsubsection}{\numberline {2.3.1}UART}{15}{subsubsection.2.3.1}%
+\contentsline {subsubsection}{\numberline {2.3.2}MQTT}{17}{subsubsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.4}Datenstrukturen und Algorithmen}{18}{subsection.2.4}%
+\contentsline {subsubsection}{\numberline {2.4.1}Ringbuffer}{18}{subsubsection.2.4.1}%
+\contentsline {subsubsection}{\numberline {2.4.2}Cyclic Redundancy Check}{18}{subsubsection.2.4.2}%
+\contentsline {subsection}{\numberline {2.5}STM32 Hardware Abstraction Layer und CubeMX}{18}{subsection.2.5}%
+\contentsline {section}{\numberline {3}Umsetzung}{20}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Protokoll zur Übertragung von Daten}{20}{subsection.3.1}%
+\contentsline {subsubsection}{\numberline {3.1.1}CRC16-CCITT}{20}{subsubsection.3.1.1}%
+\contentsline {subsubsection}{\numberline {3.1.2}Datenformat}{22}{subsubsection.3.1.2}%
+\contentsline {subsubsection}{\numberline {3.1.3}Nachrichtentypen}{22}{subsubsection.3.1.3}%
+\contentsline {subsection}{\numberline {3.2}Übertragung von Daten}{24}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}STM32: Strukturvariable DMA\_STRUCT}{24}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}STM32: Konfiguration des UART}{24}{subsubsection.3.2.2}%
+\contentsline {subsubsection}{\numberline {3.2.3}STM32: Idle Line Detection}{25}{subsubsection.3.2.3}%
+\contentsline {subsubsection}{\numberline {3.2.4}STM32: Empfangsinterrupt / DMA Circular Buffer}{26}{subsubsection.3.2.4}%
+\contentsline {subsubsection}{\numberline {3.2.5}STM32: Überprüfen der Daten}{28}{subsubsection.3.2.5}%
+\contentsline {subsubsection}{\numberline {3.2.6}STM32: Verarbeitung der empfangenen Daten}{29}{subsubsection.3.2.6}%
+\contentsline {subsubsection}{\numberline {3.2.7}STM32: Erstellen von Telegrammen}{29}{subsubsection.3.2.7}%
+\contentsline {subsubsection}{\numberline {3.2.8}STM32: Versenden von Daten}{30}{subsubsection.3.2.8}%
+\contentsline {subsubsection}{\numberline {3.2.9}ESP8266: Empfang und Überprüfung der Daten}{31}{subsubsection.3.2.9}%
+\contentsline {subsubsection}{\numberline {3.2.10}ESP8266: Anmelden an WLAN und MQTT-Server}{34}{subsubsection.3.2.10}%
+\contentsline {subsubsection}{\numberline {3.2.11}ESP8266: Empfang und Versand per MQTT}{36}{subsubsection.3.2.11}%
+\contentsline {subsection}{\numberline {3.3}Erfassung und Verarbeitung von Messwerten}{39}{subsection.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.1}Kapazitive Feuchtigkeitsmessung}{39}{subsubsection.3.3.1}%
+\contentsline {subsubsection}{\numberline {3.3.2}Analog-Digital Converter}{39}{subsubsection.3.3.2}%
+\contentsline {subsubsection}{\numberline {3.3.3}Strukturvariable SENS\_STRUCT}{40}{subsubsection.3.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.4}Kalibrierung des Sensors}{41}{subsubsection.3.3.4}%
+\contentsline {subsubsection}{\numberline {3.3.5}Berechnung des Messwertes}{44}{subsubsection.3.3.5}%
+\contentsline {subsubsection}{\numberline {3.3.6}Periodisches Versenden der Messwerte}{45}{subsubsection.3.3.6}%
+\contentsline {subsection}{\numberline {3.4}Inbetriebnahme MQTT-Server auf Raspberry Pi}{47}{subsection.3.4}%
+\contentsline {section}{\numberline {4}Auswertung}{49}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Fazit}{49}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Fehler}{49}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Ausblick}{49}{subsection.4.3}%
+\contentsline {section}{\nonumberline Abbildungsverzeichnis}{50}{section*.46}%
+\contentsline {section}{\nonumberline Listings}{51}{section*.47}%
+\contentsline {section}{\nonumberline Quellenverzeichnis}{53}{section*.49}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

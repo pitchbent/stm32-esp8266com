@@ -3,34 +3,31 @@
 #include <main.h>
 
 #include <ESP8266WiFi.h>
-#include <xtea.h>
 #include <crc16ccitt.h>
-#include <uartcom.h>
 #include <PubSubClient.h>
 
 
-const char* ssid = "WuTangLAN";
-const char* password = "11933793430981488313";
+const char* ssid = "yourWIFIhere";
+const char* password = "yourPASSWORDhere";
 const char* mqtt_server = "192.168.178.68";
+
+String clientId = "ESP8266_Humid";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
 
 const uint16_t ledPin = 12;
 
-//const uint8_t numChars = 99;
+
+
+
+
+
 uint8_t receivedChars[BUF_SIZE];   // an array to store the received Data
 bool newData = false;
-//uint16_t timeout = 10000;
 uint16_t length_pub;               // length of the mqtt msg
 
 uint8_t mqtt_in_data[BUF_SIZE];
-
-
-
-
-//uint32_t xt_data[2] = {0x266e817d,0xbacd5035}; //2*32Bit Data
-
 
 
 
@@ -47,7 +44,7 @@ void setup() {
 
     pinMode(ledPin,OUTPUT);
     Serial.begin(BAUD);
-    Serial.println("ready");
+    //Serial.println("ready");
 
     setup_wifi();
     client.setServer(mqtt_server,1883);
@@ -63,19 +60,19 @@ void loop() {
     if (!client.connected()) {
       reconnect();
     }
-    if(!client.loop())
-      client.connect("ESP8266Client");
+    client.loop();                //check for msg, calls callback if new msg is available
+//    if(!client.loop())
+//      client.connect("ESP8266Client");
     if (newData == true)
     {
-    Serial.println("pub mq");
-    for (uint8_t i = 0; i <= 6; i++)
-    {
-      Serial.print(receivedChars[i]);
-    }
+    //Serial.println("pub mq");
+    //  for (uint8_t i = 0; i <= 6; i++)
+    //  {
+    //    Serial.print(receivedChars[i]);
+    //  }
     
-    client.publish("Humid",receivedChars+3,length_pub);   //offset by three to skip the start and length bytes
-       
-    newData = false;
+      client.publish("Humid",receivedChars+3,length_pub);   //offset by three to skip the start and length bytes 
+      newData = false;
     }
 }
 
@@ -117,8 +114,8 @@ void receive()
         //crc = ((receivedChars[count-1] << 8)| receivedChars[count]);  //concatenate the two crc bytes
 
         crc_calc = CRC16_buf(receivedChars,count+1);  //count +1 because it gets iterated at the end
-        Serial.print("Calced CRC value: ");
-        Serial.println(crc_calc,HEX);
+        //Serial.print("Calced CRC value: ");
+        //Serial.println(crc_calc,HEX);
         if(crc_calc == 0)
         {
           length_pub = len; //pass the count
@@ -153,14 +150,10 @@ void receive()
 }
 
   
-// Don't change the function below. This functions connects your ESP8266 to your router
+// Connect to wifi
 void setup_wifi() {
   bool led_flag = 0;
-
   delay(10);
-  Serial.println();
-  Serial.print("Connecting to ");
-  Serial.println(ssid);
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
@@ -174,12 +167,8 @@ void setup_wifi() {
       digitalWrite(ledPin,LOW);
       led_flag = 0;
     }
-    Serial.print(".");
   }
   digitalWrite(ledPin,LOW);
-  Serial.println("");
-  Serial.print("WiFi connected - ESP IP address: ");
-  Serial.println(WiFi.localIP());
 }
 //Callback if a message is published on the subscribed topic
 //Converts the received message into a message which is understood by STM and forwards it
@@ -228,7 +217,7 @@ void callback(String topic, byte* message, unsigned int length) {
   mqtt_in_data[length+3] = (crc16 >> 8) & 0xFF; //append crc16 split into two bytes
   mqtt_in_data[length+4] = (crc16 >> 0) & 0xFF;
 
-  Serial.println("Message to send:");
+  //Serial.println("Message to send:");
 
   for (uint8_t c = 0; c <= (length+4); c++)
   {
@@ -248,22 +237,22 @@ void callback(String topic, byte* message, unsigned int length) {
 void reconnect() {
   // Loop until we're reconnected
   while (!client.connected()) {
-    Serial.print("Attempting MQTT connection...");
+    //Serial.print("Attempting MQTT connection...");
     // Create a random client ID
-    String clientId = "ESP8266Client-";
-    clientId += String(random(0xffff), HEX);
+    //String clientId = "ESP8266Client-";
+    //clientId += String(random(0xffff), HEX);
     // Attempt to connect
     if (client.connect(clientId.c_str())) {
-      Serial.println("connected");
+      //Serial.println("connected");
       // Once connected, publish an announcement...
       client.publish("Humid", "Sensor connected!");
       // ... and resubscribe
       client.subscribe("SensorSetup");
       digitalWrite(ledPin,LOW);
     } else {
-      Serial.print("failed, rc=");
-      Serial.print(client.state());
-      Serial.println(" try again in 5 seconds");
+      //Serial.print("failed, rc=");
+      //Serial.print(client.state());
+      //Serial.println(" try again in 5 seconds");
       // Wait 5 seconds before retrying
       digitalWrite(ledPin,HIGH);
       delay(5000);

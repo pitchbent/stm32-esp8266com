@@ -1,12 +1,12 @@
-\subsection{Protokoll}
 
-Im folgenden soll die Entwicklung des Protokolls erklärt werden. Zuerst wird auf den Algorithmus zur zyklischen Redundanzprüfung eingegangen,
-anschließend auf den Aufbau der übertragenen Nachrichten.
+\subsection{Protokoll zur Übertragung von Daten}
+
+Im Folgenden soll die Entwicklung des Protokolls zur Übertragung von Daten erklärt werden. Zuerst wird auf den Algorithmus zur zyklischen Redundanzprüfung eingegangen,
+anschließend auf den Aufbau der zu übertragenden Telegramme.
 
 \subsubsection{CRC16-CCITT}
 
-Als Implementation der zyklische Redundanzprüfung wurde die Version \textit{CRC16-CCITT} gewählt, da diese bewährt und gut dokumentiert ist. Leider 
-kursieren viele fehlerhafte Implementationen dieses Algorithmus - es wurde jedoch wert darauf gelegt, die Richtige Version zu implementieren.
+Als Implementation der zyklischen Redundanzprüfung wurde die Version \textit{CRC16-CCITT} gewählt \citep{Sunshine}.
 
 \smallskip
 
@@ -35,14 +35,15 @@ Als Startwert für die Berechnung wird $0x0$ gewählt - fehlerhafte Implementati
 
 \smallskip
 
-Zwar handelt es sich bei der Berechnung des CRC-Wertes um eine Division, allerdings um eine \textit{Polynom}divsion - diese wird mit Hilfe eines Exklusiv-Oder
-Gatters (\textit{XOR}) und Schieberegistern realisiert. Den zu prüfenden Daten werden abhängig von der Länge des CRC-Polynoms Nullen angehängt, in diesem Falle also 
-16 Stück.
+Es handelt sich bei der Berechnung des CRC-Wertes um eine Polynomdivision. Diese wird mit Hilfe eines Exklusiv-Oder
+Gatters (\textit{XOR}) und Schieberegistern realisiert. Den zu prüfenden Daten werden abhängig von der Länge des CRC-Polynoms Nullen angehängt.
+Bei CRC16 entspricht dies 16 Nullen.
+
 
 \smallskip
 
-Um die Daten zu Prüfen, wird das CRC-Schieberegister mit '0' initialisiert. Anschließend wird der zu prüfende Wert, mit angehängten Nullen von rechts
-in das Schieberegister "geschoben", bis das \ac{MSB} gleich '1' ist. Anschließend wird das Schieberegister um eine Einheit weitergeschoben, sodass das \ac{MSB}
+Um die Daten zu prüfen, wird das CRC-Schieberegister mit '0' initialisiert. Anschließend wird der zu prüfende Wert, mit angehängten Nullen, von rechts
+in das Schieberegister geschoben, bis das \ac{MSB} gleich '1' ist. Anschließend wird das Schieberegister um eine Einheit weitergeschoben, sodass das \ac{MSB}
 herausfällt. Dann wird das Schieberegister mit Hilfe des XOR-Vergleiches mit dem CRC-Polynom verglichen. Der so entstandene Wert wird wieder in das Schieberegister
 übernommen \citep{IK_VL}. 
 
@@ -50,13 +51,13 @@ herausfällt. Dann wird das Schieberegister mit Hilfe des XOR-Vergleiches mit de
 
 Nun werden immer wieder Daten von rechts in das Register hineingeschoben. Immer wenn das \ac{MSB} einer '1' entspricht und im nächsten Schritt aus dem Register
 geschoben wird, wird ein XOR-Vergleich mit dem CRC-Polynom durchgeführt. Dies wird so lange wiederholt, bis keine neuen Daten mehr in das Register geschoben werden können.
-Der Wert welcher nun im Schieberegister verbleibt, entspricht der Prüfsumme \citep{IK_VL}.
+Der Wert, welcher nun im Schieberegister verbleibt, entspricht der Prüfsumme \citep{IK_VL}.
 
 \smallskip
 
 Die Implementation in C bedient sich zweier Kniffe, um die zuvor erklärte Berechnung zu beschleunigen. Auf ein Initialisieren mit 0x0000 kann verzichtet werden,
-da keine XOR-Vergleiche mit Nullen durchgeführt werden. Der Startwert wird also direkt mit den Eingangsdaten initialisiert werden. Auch auf ein anhängen der Nullen 
-kann verzichtet werden, da der \textit{<<-Operator (left shift)} automatisch am \ac{LSB} Nullen anhängt. 
+da keine XOR-Vergleiche mit Nullen durchgeführt werden. Der Startwert kann also direkt mit den Eingangsdaten initialisiert werden. Ein Anhängen von Nullen ist ebenfalls
+nicht erforderlich, da der <<-Operator \textit{(left shift)} automatisch am \ac{LSB} Nullen anhängt. 
 
 \newpage
 
@@ -86,17 +87,17 @@ return crc;
 }
 \end{lstlisting}
 
-Der Funktion wird ein Zeiger zu einem Array übergeben, sowie die Länge dieses Arrays. Die Variable \lstinline!poly! repräsentiert das CRC-Polynom,
+Der Funktion wird ein Zeiger auf ein Array übergeben, sowie die Länge des Arrays. Die Variable \lstinline!poly! repräsentiert das CRC-Polynom,
 während die Variable \lstinline!crc! für das Schieberegister steht.
 
 \smallskip
 
-Die Berechnung des CRC-Wertes wird für jedes Byte des Arrays durchgeführt, wobei der Startwert für jedes Byte nach dem ersten die CRC-Prüfsumme des 
-letzten Durchlaufes ist. Für jedes Byte wiederrum müssen, auf Grund der länge eines Bytes, acht mal die Shift- und XOR-Operationen durchgeführt werden.
+Die Berechnung des CRC-Wertes wird für jedes Byte des Arrays durchgeführt, der Startwert für jedes Byte nach dem ersten Byte ist die CRC-Prüfsumme des 
+letzten Durchlaufes. Für jedes Byte wiederum müssen, auf Grund der Länge eines Bytes, acht mal die Shift- und XOR-Operationen durchgeführt werden.
 
 \smallskip
 
-Mittels des Wertes \lstinline!0x8000! wird geprüft, ob das \ac{MSB} gesetzt ist. Der Rückgabewert entspricht der CRC-Prüfsumme. 
+Mit dem Wert \lstinline!0x8000! wird geprüft, ob das \ac{MSB} gesetzt ist. Der Rückgabewert entspricht der CRC-Prüfsumme. 
 
 \newpage
 
@@ -105,22 +106,15 @@ Mittels des Wertes \lstinline!0x8000! wird geprüft, ob das \ac{MSB} gesetzt ist
 
 Bei den übertragenen Daten handelt es sich um Zeichen im \acs{ASCII}-Format. Dies vereinfacht die Auswertung und hat den Vorteil, dass die Kommunikation
 zu Testzwecken leicht mitgelesen werden kann. Im folgenden wird unter \textit{Telegramm} die Gesamtheit der übertragenen Daten verstanden, während 
-der Ausdruck \textit{Nachricht} den eigentlichen Informationsgehalt beschreibt.
+der Ausdruck \textit{Nachricht} den eigentlichen Informationsinhalt beschreibt.
 
 \smallskip
 
-Ein Telegramm teilt sich in mehrere Teile auf:
+Ein Telegramm besteht aus: Startzeichen, Länge, Nachricht, CRC-Prüfsumme.
 
-\begin{itemize}
-    \item Startzeichen
-    \item Länge
-    \item Nachricht
-    \item CRC-Prüfsumme
-\end{itemize}
+\smallskip
 
-
-
-Die verschiedenen Teile bestehen aus einer verschiedenen Anzahl an Bytes. Während Start- und Endzeichen nur ein Byte benötigen, werden für die
+Die einzelnen Teile bestehen aus einer verschiedenen Anzahl an Bytes. Während Start- und Endzeichen nur ein Byte benötigen, werden für die
 Länge der Nachricht und die CRC-Prüfsumme zwei Bytes benötigt.
 
 \smallskip
@@ -147,14 +141,14 @@ das Ende des Telegramms berechnet sich aus der Länge der Nachricht. Das Startze
 \label{subsub: Nachricht}
 
 Basierend auf dem in \ref{subsub: Datenformat} beschriebenen Format werden nun verschiedene Nachrichtentypen implementiert, welche die Steuerung
-der Platine ermöglichen oder der Information dienen. Dabei ist zu Unterscheiden, ob es sich um Nachrichten handelt, welche an das Board geschickt werden,
+der Platine ermöglichen oder der Information dienen. Dabei ist zu unterscheiden, ob es sich um Nachrichten handelt, welche an das Board geschickt werden,
 oder um Nachrichten, welche vom Board versendet werden.
 Die Nachrichten werden dabei durch den STM32 verarbeitet, der ESP8266 leitet sie weiter. 
 
 \smallskip
 
-Um die Nachrichten zu differenzieren, wird bei Nachrichten welche an das Board gesendet werden die Nachricht durch eine \ac{ASCII}-Zahl 
-kodiert, bei Nachrichten welche das Board sendet durch einen \ac{ASCII}-Buchstaben.
+Um die Nachrichten zu differenzieren, wird bei Nachrichten, welche an das Board gesendet werden, die Nachricht durch eine \acs{ASCII}-Zahl 
+kodiert, bei Nachrichten, welche das Board sendet, durch einen \acs{ASCII}-Buchstaben.
 
 \smallskip
 
@@ -164,13 +158,14 @@ kodiert, bei Nachrichten welche das Board sendet durch einen \ac{ASCII}-Buchstab
     \item CALIBRATE (2) - Kalibrieren des Sensors
     \item SENDVAL (3) - Start der automatischen Versendung von Messwerten 
 \end{itemize}
-Der Nachricht SENDVAL wird desweiteren noch eine '1' oder eine '0' angehängt, um die Funktion ein- oder auszuschalten.
 
-\smallskip
+Der Nachricht SENDVAL wird eine '1' oder eine '0' angehängt, um die Funktion ein- oder auszuschalten.
 
-Soll nun z.B. der Status des Boards abgefragt werden, wird die Nachricht STATUS versendet. Diese Nachricht ist genau 1 Byte lang, deshalb
-wird als Längeninformation die \ac{ASCII}-Zahlen '0' und '1' übertragen. Danach folgt die eigentliche Nachricht, welche ebenfalls durch eine '1' 
-repräsentiert wird. Abgeschlossen wird das Telegramm durch die CRC-Prüfsumme. Das Telegramm ergibt sich somit zu:
+\newpage
+
+Soll z.B. der Status des Boards abgefragt werden, wird die Nachricht STATUS versendet. Diese Nachricht ist genau 1 Byte lang, deshalb
+werden als Längeninformationen die \ac{ASCII}-Zahlen '0' und '1' übertragen. Danach folgt die eigentliche Nachricht, welche ebenfalls durch eine '1' 
+repräsentiert wird. Abgeschlossen wird das Telegramm durch die CRC-Prüfsumme. Das Telegramm ergibt sich somit wie folgt:
 
 \begin{table}[h]
 \centering
@@ -201,6 +196,6 @@ Dem Nachrichtentyp ERROR folgt immer der Typ des aufgetretenen Fehlers, repräse
 \begin{itemize}
     \item ER\_UNSPEC (1) - unspezifizierter Error
     \item ER\_CAL (2) - Fehler bei der Kalibrierung des Sensors
-    \item ER\_NOT\_CAL (3) - Sensor nicht Kalibriert
+    \item ER\_NOT\_CAL (3) - Sensor nicht kalibriert
     \item ER\_UN\_MSG (4) - Die empfangene Nachricht kann nicht interpretiert werden
 \end{itemize}

@@ -1,13 +1,14 @@
-This is BibTeX, Version 0.99d (TeX Live 2020/Arch Linux)
-Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+This is BibTeX, Version 0.99d (TeX Live 2021/Arch Linux)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: BA_Paper.aux
 A level-1 auxiliary file: Content//0-Deckblatt.aux
 A level-1 auxiliary file: Content/0-Vorwort.aux
 A level-1 auxiliary file: Content/0-Selbststaendigkeit.aux
 A level-1 auxiliary file: Content/0-Zusammenfassung.aux
-A level-1 auxiliary file: Content/0-Abkuerzungsverzeichnis.aux
+A level-1 auxiliary file: Content/0-Abkürzungsverzeichnis.aux
 The style file: unsrtnat.bst
 Database file #1: bibliography.bib
+Warning--empty year in Listing
 Warning--empty year in ESP8266_Datasheet
 Warning--empty year in STM32_Datasheet
 Warning--empty year in STM32_Ref
@@ -17,47 +18,51 @@ Warning--empty year in MQTT_FAQ
 Warning--empty year in ImgBuffer
 Warning--empty year in HAL_Description
 Warning--empty year in CubeMX
+Warning--empty year in Sunshine
 Warning--empty year in ArduinoRef
+Warning--empty year in ESPWiFi
+Warning--empty year in PubSub
 Warning--empty year in Sensor
-You've used 17 entries,
+Warning--empty year in Mosquitto
+You've used 22 entries,
             2481 wiz_defined-function locations,
-            648 strings with 6767 characters,
-and the built_in function-call counts, 4491 in all, are:
-= -- 377
-> -- 119
-< -- 17
-+ -- 71
-- -- 34
-* -- 197
-:= -- 694
-add.period$ -- 60
-call.type$ -- 17
-change.case$ -- 31
-chr.to.int$ -- 14
-cite$ -- 28
-duplicate$ -- 257
-empty$ -- 509
-format.name$ -- 51
-if$ -- 974
+            674 strings with 7346 characters,
+and the built_in function-call counts, 5816 in all, are:
+= -- 492
+> -- 154
+< -- 22
++ -- 91
+- -- 44
+* -- 252
+:= -- 894
+add.period$ -- 80
+call.type$ -- 22
+change.case$ -- 41
+chr.to.int$ -- 19
+cite$ -- 38
+duplicate$ -- 327
+empty$ -- 659
+format.name$ -- 66
+if$ -- 1264
 int.to.chr$ -- 4
-int.to.str$ -- 18
+int.to.str$ -- 23
 missing$ -- 7
-newline$ -- 102
-num.names$ -- 51
-pop$ -- 232
+newline$ -- 132
+num.names$ -- 66
+pop$ -- 307
 preamble$ -- 1
-purify$ -- 17
+purify$ -- 22
 quote$ -- 0
-skip$ -- 160
+skip$ -- 205
 stack$ -- 0
-substring$ -- 34
-swap$ -- 38
+substring$ -- 44
+swap$ -- 48
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 110
-warning$ -- 11
-while$ -- 34
+type$ -- 145
+warning$ -- 16
+while$ -- 44
 width$ -- 0
-write$ -- 222
-(There were 11 warnings)
+write$ -- 287
+(There were 16 warnings)

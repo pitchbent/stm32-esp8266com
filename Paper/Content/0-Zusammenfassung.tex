@@ -3,21 +3,25 @@
 \addcontentsline{toc}{section}{Zusammenfassung}
 
 
-Thema dieser Arbeit ist die Entwicklung einer robusten Kommunikation zwischen zwei \ac{uC} zur Weiterleitung von sensiblen Messdaten und 
-die anschließende Weiterleitung der Daten an ein Netzwerk. Die Entwicklung soll an Hand eines Praxisbeispiels demonstriert werden.
+Thema dieser Arbeit ist die Entwicklung einer robusten Kommunikation zwischen zwei \acp{uC} zur Weiterleitung von sensiblen Messdaten und 
+der anschließenden Weiterleitung der Daten an ein übergeordnetes Netzwerk. Die Entwicklung soll an Hand eines Praxisbeispiels demonstriert werden.
 
 \smallskip
 
-Grundlage der Arbeit ist eine vorhergegangene Studienarbeit \citep{IoTGateway} in welcher die Hardware,
+Grundlage der Arbeit ist meine vorhergegangene Studienarbeit \citep{IoTGateway}, in welcher die Hardware,
 welche die Grundlage für dieses Projekt bildet, entwickelt, bestückt und in Betrieb genommen wurde.
 
-Die entwickelte Platine verfügt über zwei \ac{uC}, deren \acs{UART}-Schnittstellen miteinander verbunden sind. Ein Prozessor ist hierbei
+Die entwickelte Platine verfügt über zwei \acs{uC}, deren \acs{UART}-Schnittstellen miteinander verbunden sind. Ein Prozessor ist hierbei
 für die Verarbeitung von Sensormesswerten zuständig, während der andere als \acs{WLAN}-Relais an ein übergeordnetes Netzwerk fungiert.
 
 \smallskip
 
-Auf Basis der \acs{UART}-Schnittstellen der beiden Prozessoren soll ein Protokoll implementiert werden, welches einerseits den Transport
+Auf Basis der \acs{UART}-Schnittstellen der beiden Prozessoren soll ein Protokoll implementiert werden, welches sowohl den Transport
 von Messwerten in die eine Richtung, als auch den Transport von Konfigurationsbefehlen in die andere Richtung ermöglicht. 
 
-Als Demonstrationsbeispiel wurde die kapazitive Messung von Feuchtigkeit im Erdreich gewählt. Die gemessenen Daten sollen verarbeitet werden und
-per \ac{MQTT} an ein übergeordnetes Netzwerk weitergeleitet werden.
+Als Praxisbeispiel wurde die kapazitive Messung von Feuchtigkeit im Erdreich gewählt. Die gemessenen Daten sollen verarbeitet und
+per \ac{MQTT} an ein Netzwerk weitergeleitet werden.
+
+\smallskip
+
+Der gesamte Code ist in einer GitHub-Repository zu finden \citep{Listing}.

@@ -27,7 +27,7 @@ uint8_t er_send(uint8_t er_code,uint8_t * txbuf)
 
 	txbuf[0] = START;
 	txbuf[1] = 0 + OFF_ASCII;
-	txbuf[2] = 1 + OFF_ASCII; //ASCII '1'
+	txbuf[2] = 2 + OFF_ASCII; //ASCII '1'
 	txbuf[3] = ERROR;
 	txbuf[4] = er_code;
 
@@ -36,7 +36,7 @@ uint8_t er_send(uint8_t er_code,uint8_t * txbuf)
 	txbuf[5] = (crc_value >> 8) & 0xFF;			//split crc value into 2x8bit
 	txbuf[6] = (crc_value >> 0) & 0xFF;
 
-	return 6;									//length
+	return 7;									//length
 
 
 }

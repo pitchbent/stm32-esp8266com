@@ -1,35 +1,40 @@
-\subsection{Bewertung und Fazit}
-Es wurde eine robuste Übertragung sensibler Messwerte erfolgreich implementiert. Mittels der genutzten Technologien wie zyklische Redundanzprüfung, \ac{UART} und \ac{MQTT}
-werden die Messwerte zuverlässig übertragen und auf Fehler in der Übertragung mittel zyklischer Redundanzprüfung überprüft. Durch die Nutzung von \ac{MQTT} ist die Anbindung an ein übergeordnetes 
+\subsection{Fazit}
+Es wurde eine robuste Übertragung sensibler Messwerte erfolgreich implementiert. Mittels der genutzten Technologien wie zyklischer Redundanzprüfung, \ac{UART} und \ac{MQTT}
+werden die Messwerte zuverlässig übertragen und auf Fehler in der Übertragung überprüft. Durch die Nutzung von \ac{MQTT} ist die Anbindung an ein übergeordnetes 
 Netzwerk möglich. 
 
 \smallskip
 
 Durch die Implementation eines kapazitiven Feuchtigkeitssensors wurde die Funktionalität der Übertragung erfolgreich demonstriert. Durch diverse Befehle kann der Sensor
-kalibriert werden und das Versenden von Messwerten freigeschaltet werden.
+kalibriert und das Versenden von Messwerten freigeschaltet werden.
 
 \subsection{Fehler}
-\paragraph{Nachrichtenformat}
-Die Implementation einer gut funktionierenden Kommunikation erwies sich als durchaus komplex. Die ursprüngliche Idee, das Telegrammende ebenfalls durch ein Zeichen
-anzuzeigen erwies sich nicht als ausreichend, da es auf Grund des genutzten \ac{ASCII}-Zeichensatzes immer wieder zu falsch erkannten Telegrammenden kam. Dies war 
-begründet an der Nutzung der CRC-Prüfsumme, diese kann durchaus das selbe Zeichen ergeben, welches auch für das Ende eines Telegrammes stand. 
+Die Implementation einer robusten Kommunikation ist komplex. Die ursprüngliche Idee, das Telegrammende ebenfalls durch ein \ac{ASCII}-Zeichen
+anzuzeigen, erwies sich als unzuverlässig.Es kam immer wieder zu falsch erkannten Telegrammenden. Ursache dafür war die Nutzung der CRC-Prüfsumme,
+da diese durchaus dasselbe Zeichen ergeben kann, welches auch für das Telegrammende definiert war. 
 
 \smallskip
 
-Die Übertragung von Längeninformationen und den Verzicht auf ein Stopp-Zeichen löste das Problem.
+Lösung des Problems war die Übertragung von Längeninformationen und der Verzicht auf ein Ende-Zeichen.
 
-\paragraph{Zyklische Redundanzprüfung}
-Der STM32 besitzt eine Peripherieeinheit zur Berechnung von CRC32-Prüfsummen. Leider erwies sich die Nutzung dieser Peripherieeinheit als zu komplex, da der genutzte
-Algorithmus keinen populären Standard folgt und damit die Prüfung der Nachrichten fehlerbehaftet war. Die Implementation der zyklischen Redundanzprüfung mittels 
+\smallskip
+
+Der STM32 besitzt eine Peripherieeinheit zur Berechnung von CRC32-Prüfsummen. Da der genutzte
+Algorithmus keinem etablierten Standard folgt, wurde diese Peripherieeinheit nicht genutzt. Die Implementation der zyklischen Redundanzprüfung mittels 
 CRC16-CCITT erwies sich jedoch als zuverlässig.
 
 \subsection{Ausblick}
-Diese Arbeit legt einen Grundstein für diverse mögliche weitere Entwicklungen und Verbesserungen. Es ist durchaus interessant, andere Sensortypen zu implementieren 
-und eine simple Konfiguration dieser zu ermöglichen. Die Verschlüsselung der Kommunikation zwischen den Prozessoren ist eine weitere Möglichkeit, die Datenübertragung
+Diese Arbeit bildet eine Grundlage für zahlreiche mögliche weitere Entwicklungen und Verbesserungen. Es ist durchaus interessant, andere Sensortypen zu implementieren 
+und eine einfache Konfiguration dieser zu ermöglichen. Die Verschlüsselung der Kommunikation zwischen den Prozessoren ist eine weitere Möglichkeit, die Datenübertragung
 weiter zu optimieren. Schlanke Algorithmen wie XTEA bieten sich hierfür an, da die Berechnung dieser vergleichsweise wenig Rechenleistung benötigt.
 
 \smallskip
 
+Um den Code zu optimieren, wäre die Umstellung auf die Programmiersprache C++ und die damit einhergehende Objektorientierung zukunftsorientiert. Dies würde in Hinblick
+auf die Implementation mehrerer Sensoren (auch Sensoren gleichen Typs) den Progammieraufwand verringern und die Anbindung der Sensoren vereinfachen.
+
+\smallskip
+
 Auch der Aspekt der serverseitigen Datenverarbeitung der gesammelten Daten ist interessant. Mittels Projekten wie Node-Red oder anderen Automatisierungsplattformen 
-lassen sich \ac{MQTT}-Nachrichten leicht verarbeiten und zu versenden. Gekoppelt mit einer graphischen Repräsentation der Messwerte ist dies ein logischer 
+lassen sich \ac{MQTT}-Nachrichten leicht verarbeiten und versenden. Gekoppelt mit einer graphischen Repräsentation der Messwerte ist dies ein logischer 
 nächster Schritt in der Fortführung des Projekts.

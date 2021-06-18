@@ -1,4 +1,4 @@
-\begin{thebibliography}{17}
+\begin{thebibliography}{22}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -7,7 +7,13 @@
 
 \bibitem[Bartel(Wintersemester 2020)]{IoTGateway}
 Julius Bartel.
-\newblock Entwicklung eines iot-gateways, Wintersemester 2020.
+\newblock Entwicklung eines {IoT-Gateways}, Wintersemester 2020.
+
+\bibitem[Bartel()]{Listing}
+Julius Bartel.
+\newblock Listings der {Bachelorarbeit}.
+\newblock URL \url{https://github.com/pitchbent/stm32-esp8266com}.
+\newblock Zuletzt aufgerunfen am: 6.6.2021.
 
 \bibitem[Systems()]{ESP8266_Datasheet}
 Espressif Systems.
@@ -36,7 +42,7 @@ Carmine Noviello.
 
 \bibitem[RosarioVanTulpe()]{ImgParitaet}
 RosarioVanTulpe.
-\newblock Codetafel – dualergänztes gerades paritätsbit (e = even =
+\newblock Codetafel – {Dualergänztes} gerades {Paritätsbit} ({E} = even =
   gerade).
 \newblock URL
   \url{https://de.wikipedia.org/wiki/Parit%C3%A4tsbit#/media/Datei:Code_Even_dualergaenzt.svg}.
@@ -50,7 +56,7 @@ Klaus Dembowski.
 
 \bibitem[Sparkfun()]{ImgRXTX}
 Sparkfun.
-\newblock Wiring and hardware.
+\newblock Wiring and {Hardware}.
 \newblock URL
   \url{https://cdn.sparkfun.com/assets/2/5/c/4/5/50e1ce8bce395fb62b000000.png}.
 \newblock Zuletzt aufgerufen am: 6.5.2021.
@@ -62,13 +68,13 @@ Helmut Müller.
 
 \bibitem[MQTT.org()]{MQTT_FAQ}
 MQTT.org.
-\newblock Mqtt faq.
+\newblock Mqtt {FAQ}.
 \newblock URL \url{https://mqtt.org/faq/}.
 \newblock Zuletzt aufgerufen am: 29.5.2021.
 
-\bibitem[Dominik~Obermaier(2018)]{MQTT_Article}
-Sebastian~Gerstl Dominik~Obermaier.
-\newblock Was ist mqtt?
+\bibitem[und Sebastian~Gerstl(2018)]{MQTT_Article}
+Dominik~Obermaier und Sebastian~Gerstl.
+\newblock Was ist {MQTT}?
 \newblock \emph{embedded-software-engineering}, 2018.
 
 \bibitem[Cburnett()]{ImgBuffer}
@@ -80,7 +86,7 @@ Cburnett.
 
 \bibitem[Hübner(Sommersemester 2020)]{IK_VL}
 Dr.~Christof Hübner.
-\newblock Industrielle kommunikationstechnik, Sommersemester 2020.
+\newblock Industrielle {Kommunikationstechnik}, Sommersemester 2020.
 
 \bibitem[ST({\natexlab{c}})]{HAL_Description}
 ST.
@@ -95,11 +101,31 @@ ST.
 \newblock URL \url{https://www.st.com/en/development-tools/stm32cubemx.html}.
 \newblock Zuletzt aufgerufen am: 11.5.2021.
 
+\bibitem[Molkenthin()]{Sunshine}
+Bastian Molkenthin.
+\newblock Understanding {CRC}.
+\newblock URL
+  \url{http://www.sunshine2k.de/articles/coding/crc/understanding_crc.html}.
+\newblock Zuletzt aufgerufen am: 9.5.2021.
+
 \bibitem[Arduino()]{ArduinoRef}
 Arduino.
-\newblock Arduino language reference.
+\newblock Arduino {Language Reference}.
 \newblock URL \url{https://www.arduino.cc/reference/en/}.
 \newblock Zuletzt aufgerufen am: 21.5.2021.
+
+\bibitem[Grokhotkov()]{ESPWiFi}
+Ivan Grokhotkov.
+\newblock Esp8266wifi library.
+\newblock URL
+  \url{https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/readme.html}.
+\newblock Zuletzt aufgerufen am: 6.6.2021.
+
+\bibitem[O'Leary()]{PubSub}
+Nick O'Leary.
+\newblock Arduino client for {MQTT}.
+\newblock URL \url{https://github.com/knolleary/pubsubclient}.
+\newblock Zuletzt aufgerufen am: 6.6.2021.
 
 \bibitem[dfrobot()]{Sensor}
 dfrobot.
@@ -107,5 +133,11 @@ dfrobot.
 \newblock URL
   \url{https://wiki.dfrobot.com/Capacitive_Soil_Moisture_Sensor_SKU_SEN0193}.
 \newblock Zuletzt aufgerufen am: 28.5.2021.
+
+\bibitem[Foundation()]{Mosquitto}
+Eclipse Foundation.
+\newblock Eclipse {Mosquitto}.
+\newblock URL \url{https://mosquitto.org/}.
+\newblock Zuletzt aufgerufen am: 6.6.2021.
 
 \end{thebibliography}

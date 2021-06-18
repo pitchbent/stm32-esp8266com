@@ -11,38 +11,38 @@
     % \end{figure}
  \end{wrapfigure}
 
-Der Ringbuffer ist eine Datenstruktur welche nach dem \acs{FIFO}-Prinzip arbeitet. Dies bedeutet, dass die Daten, welche
+Der Ringbuffer ist eine Datenstruktur, die nach dem \ac{FIFO}-Prinzip arbeitet. Dies bedeutet, dass die Daten, welche
 zuerst in den Buffer geschrieben wurden, auch zuerst wieder ausgelesen werden. 
 
 \smallskip
 
 Die zu schreibenden Daten werden in ein Array von bestimmter Länge N geschrieben. Läuft das Array voll, werden die neuen Zeichen
-wieder an den Anfang geschrieben. Zur Orientierung werden zwei Zähler eingeführt, der s.g. Lese- und Schreibindex. Der Leseindex
-zeigt die aktuelle Position im Array an, an der gelesen wird, während der Schreibindex anzeigt, bis an welche Stelle
+wieder an den Anfang geschrieben. Zur Orientierung werden zwei Zähler eingeführt, der Lese- und Schreibindex. Der Leseindex
+zeigt die aktuelle Position im Array an. Der Schreibindex zeigt, bis an welche Stelle
 neue Daten geschrieben wurden.  
 
-Haben Lese- und Schreibindex den selben Wert, wird der Buffer als leer angesehen. 
+Haben Lese- und Schreibindex den selben Wert, gilt der Buffer als leer. 
 
 \smallskip
 
 Wird ein Zeichen in den Ringbuffer geschrieben, wird der Schreibindex inkrementiert. Sobald ein Zeichen gelesen wird, wird der Leseindex
-inkrementiert. Erreichen die beiden Indexe das Ende des Arrays, werden sie auf null zurückgesetzt.
+inkrementiert. Erreichen die beiden Indizes das Ende des Arrays, werden sie auf 0 zurückgesetzt.
 
 
-\subsubsection{Zyklische Redundanzprüfung}
+\subsubsection{Cyclic Redundancy Check}
 \label{subsub: CRC16}
 
-Die Zyklische Redundanzprüfung, im englischen \textit{cyclic redundancy check} genannt, kurz \textbf{CRC} ist eine Methode zur Erkennung von Fehlern bei 
+Cyclic Redundancy Check (\textit{deutsch Zyklische Redundanzprüfung}), kurz \textbf{CRC}, ist eine Methode zur Erkennung von Fehlern bei 
 der Übertragung. Es ist nur möglich, zufällige Fehler zu erkennen, wie sie z.B. durch Übertragungsfehler oder Rauschen auf der Leitung entstehen \citep{IK_VL}.
 
 \smallskip
 
-Den zu übertragenden Daten wird ein zuvor berechneter Wert angehängt. Mittels dieses Wertes kann nun die Empfängerseite feststellen, ob die Daten korrekt übertragenden
-wurden, oder ob ein Fehler vorliegt. 
+Den zu übertragenden Daten wird ein zuvor berechneter Wert angehängt. Mittels dieses Wertes kann die Empfängerseite feststellen, ob die Daten korrekt 
+übertragen wurden oder ob ein Fehler vorliegt. 
 
 \smallskip
 
-CRC nutzt zur Überprüfung der Daten die Polynomdivsion. Die Daten, welche übertragen werden sollen, werden als Polynom dargestellt.
+CRC nutzt zur Überprüfung der Daten die Polynomdivsion. Die zu übertragenden Daten werden als Polynom dargestellt.
 
 \smallskip
 
@@ -57,7 +57,7 @@ wird anschließend bei der Datenübertragung an die zu übertragende Nachricht a
 \smallskip
 
 Empfängerseitig wird nun abermals eine Polynomdivision durchgeführt. Ist das Ergebnis der Polynomdivision empfangene Nachricht inkl. CRC-Wert dividiert durch das
-CRC-Polynom gleich null, wurde die Nachricht korrekt übertragen \citep{IK_VL}.
+CRC-Polynom gleich 0, wurde die Nachricht korrekt übertragen \citep{IK_VL}.
 
 
 \subsection{STM32 Hardware Abstraction Layer und CubeMX}
@@ -71,20 +71,22 @@ Die dazu notwendigen Libraries werden vom Hersteller (ST) bereitgestellt und dok
 
 \smallskip
 
-Funktionen, welche vom \ac{HAL} bereitgestellt werden, sind zu erkennen an einem vorgestellten \textit{HAL}. Folgende Funktion schaltet z.B. einen \ac{GPIO} um:
+Funktionen, welche durch den \ac{HAL} bereitgestellt werden, sind zu erkennen an einem vorgestellten \textit{HAL}. Folgende Funktion schaltet z.B. einen \ac{GPIO} um:
 
 \smallskip
 
-\begin{lstlisting}
-    HAL_GPIO_TogglePin(GPIOx, GPIO_Pin);
+\begin{lstlisting}[caption={\textit{Umschalten von \acs{GPIO}}}]
+   void HAL_GPIO_TogglePin(GPIOx, GPIO_Pin);
 \end{lstlisting}
 
 \smallskip
 
-Neben dem \ac{HAL} stellt der Hersteller ein weiteres Tool zur Verfügung (Cube MX \citep{CubeMX}), welche die schnelle Erstellung des Initialiserungscodes 
+Neben dem \ac{HAL} stellt der Hersteller ein weiteres Tool zur Verfügung (Cube MX \citep{CubeMX}), welches die schnelle Erstellung des Initialiserungscodes 
 für die Peripherie und sonstige Funktionen ermöglicht. Dies verringert ebenfalls die Fehleranfälligkeit und vereinfacht die Programmierung.
 
-Mittels einer graphischen Oberfläche können den verschieden Anschlüssen des \ac{uC} Funktionen zugewiesen (z.B. \ac{I2C}) werden und die Timings und Taktfrequenzen
+\smallskip
+
+Mittels einer graphischen Oberfläche können den verschieden Anschlüssen des \ac{uC} Funktionen zugewiesen (z.B. \acs{I2C}) und Taktfrequenzen
 konfiguriert werden.
 
 \vspace{0.5cm}
